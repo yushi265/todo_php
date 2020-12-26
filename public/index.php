@@ -26,7 +26,7 @@ if(!isset($tasklist)) {
     <!-- タスク追加 -->
     <div class="alert alert-primary" role="alert">
       <form action="addtask.php" method="post">
-        <input type="text" name="task" value="">
+        <input type="text" name="task" value="" class="input_task">
         <button type="submit" class="btn btn-primary">登録
         </button>
       </form>
@@ -40,10 +40,15 @@ if(!isset($tasklist)) {
         <?php else: ?>
           <?php foreach($tasklist as $task): ?>
             <li class="list-group-item">
-              <?php echo $task['task'] ?>
-              <a href="deletetask.php?id=<?php echo $task['id'] ?>">
-                <button type="buttom" class="btn btn-primary">削除</button>
-              </a>
+              <p><?php echo $task['task'] ?></p>
+              <div class="btn_group">
+                <a href="edittask.php?id=<?php echo $task['id'] ?>">
+                <button type="buttom" class="btn btn-primary">編集</button>
+                </a>
+                <a href="deletetask.php?id=<?php echo $task['id'] ?>">
+                  <button type="buttom" class="btn btn-primary">削除</button>
+                </a>
+              </div>
             </li>
           <?php endforeach ?>
         <?php endif ?>

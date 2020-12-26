@@ -68,6 +68,28 @@ class TaskLogic {
   }
 
   /**
+   * タスクを編集する
+   * @param string $id
+   * @param string $edited_task
+   * @return bool $result
+   */
+  public static function editTask($id, $edited_task) {
+    $sql = 'UPDATE task SET task = ? WHERE id = ?';
+
+    $arr = [];
+    $arr[] = $edited_task;
+    $arr[] = $id;
+
+    try {
+      $stmt = connect()->prepare($sql);
+      $result = $stmt->execute($arr);
+      return $result;
+    } catch(\Exeption $e) {
+      exit('表示できませんでした');
+    }
+  }
+
+  /**
    * タスクを削除する
    * @param string $task_id
    * @return bool $result
