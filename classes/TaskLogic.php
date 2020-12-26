@@ -44,9 +44,48 @@ class TaskLogic {
     } catch(\Exception $e) {
       return $result;
     }
-
   }
 
+  /**
+   * idからタスクを引き出す
+   * @param int $id
+   * @return array $result
+   */
+  public static function getTaskById($task_id) {
+    $sql = 'SELECT * FROM task WHERE id = ?';
+
+    $arr = [];
+    $arr[] = $task_id;
+
+    try {
+      $stmt = connect()->prepare($sql);
+      $stmt->execute($arr);
+      $task = $stmt->fetch();
+      return $task;
+    } catch(\Exeption $e) {
+      exit('表示できませんでした');
+    }
+  }
+
+  /**
+   * タスクを削除する
+   * @param string $task_id
+   * @return bool $result
+   */
+  public static function deleteTask($task_id) {
+    $sql = 'DELETE FROM task WHERE id = ?';
+
+    $arr = [];
+    $arr[] = $task_id;
+
+    try {
+      $stmt = connect()->prepare($sql);
+      $result = $stmt->execute($arr);
+      return $result;
+    } catch(\Exeption $e) {
+      exit('表示できませんでした');
+    }
+  }
 }
 
 ?>

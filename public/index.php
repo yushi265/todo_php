@@ -39,7 +39,12 @@ if(!isset($tasklist)) {
           <p>タスクが登録されていません</p>
         <?php else: ?>
           <?php foreach($tasklist as $task): ?>
-            <li class="list-group-item"><?php echo $task['task'] ?></li>
+            <li class="list-group-item">
+              <?php echo $task['task'] ?>
+              <a href="deletetask.php?id=<?php echo $task['id'] ?>">
+                <button type="buttom" class="btn btn-primary">削除</button>
+              </a>
+            </li>
           <?php endforeach ?>
         <?php endif ?>
       </ul>
