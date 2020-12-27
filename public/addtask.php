@@ -2,10 +2,15 @@
 
 require_once('../classes/TaskLogic.php');
 
+//エラーメッセージ
 $err = [];
 //バリデーション
-if(!$task = filter_input(INPUT_POST, 'task')) {
+$task = filter_input(INPUT_POST, 'task');
+if(!$task) {
   $err[] = 'タスクが入力されていません';
+}
+if(mb_strlen($task) > 50) {
+  $err[] = '50文字以内で入力してください';
 }
 if(count($err) === 0) {
   $hasAdded = TaskLogic::addTask($_POST);
