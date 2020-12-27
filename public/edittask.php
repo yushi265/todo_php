@@ -1,5 +1,6 @@
 <?php
 
+require_once('../functions.php');
 require_once('../classes/TaskLogic.php');
 
 $task_id = $_GET['id'];
@@ -20,11 +21,11 @@ $task = TaskLogic::getTaskById($task_id);
 <body>
   <div class="container">
     <h3>タスク編集</h3>
-    <p>現在のタスク：<?php echo $task['task'] ?></p>
+    <p>現在のタスク：<?php echo h($task['task']) ?></p>
     <form action="comp_edit.php" method="post">
       <p>変更後のタスク</p>
       <input type="text" name="edited_task" value="">
-      <button type="submit" name="id" value="<?php echo $task['id'] ?>" class="btn btn-primary">変更する</button>
+      <button type="submit" name="id" value="<?php echo h($task['id']) ?>" class="btn btn-primary">変更する</button>
     </form>
     <a href="index.php">←戻る</a>
   </div>

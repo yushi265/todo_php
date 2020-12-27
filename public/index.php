@@ -1,5 +1,6 @@
 <?php
 
+require_once('../functions.php');
 require_once('../classes/TaskLogic.php');
 
 $tasklist = TaskLogic::getTaskList();
@@ -40,12 +41,12 @@ if(!isset($tasklist)) {
         <?php else: ?>
           <?php foreach($tasklist as $task): ?>
             <li class="list-group-item">
-              <p><?php echo $task['task'] ?></p>
+              <p><?php echo h($task['task']) ?></p>
               <div class="btn_group">
-                <a href="edittask.php?id=<?php echo $task['id'] ?>">
+                <a href="edittask.php?id=<?php echo h($task['id']) ?>">
                 <button type="buttom" class="btn btn-primary">編集</button>
                 </a>
-                <a href="deletetask.php?id=<?php echo $task['id'] ?>">
+                <a href="deletetask.php?id=<?php echo h($task['id']) ?>">
                   <button type="buttom" class="btn btn-primary">削除</button>
                 </a>
               </div>

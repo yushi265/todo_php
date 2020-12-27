@@ -1,3 +1,6 @@
+<todo_php>
+phpでデータベースを用いてタスク管理を行うアプリ。
+
 〇インデックス
   ・index.php
     → 全タスクを取得して一覧表示、取得できなかったらメッセージ表示
@@ -33,3 +36,13 @@
     → deleetask.phpからPOSTでidを受け取る
     → TaskLogit::deleteTask();でタスクを削除
     → 成功したらindex.phpへ戻す
+
+〇その他
+  ・env.php
+    → データベースのデータを定数で定義
+  
+  ・dbconnect.php
+    → データベース接続を行う関数。$pdoを返す
+
+  ・functions.php
+    → セキュリティ対策の関数。エスケープ処理。
