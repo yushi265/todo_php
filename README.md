@@ -2,65 +2,65 @@
 
 ### 〇ファイル構成
 
-    インデックス
+    - インデックス
 
-     - index.php
+        - index.php
 
-        - 全タスクを取得して一覧表示、取得できなかったらメッセージ表示
-        - 新しいタスクを入力し、期限日を設定して、登録ボタンを押すとaddtask.phpへ
-        - 編集ボタンをクリックするとedittask.phpへ
-        - 削除ボタンをクリックするとdeletetask.phpへ
+            - 全タスクを取得して一覧表示、取得できなかったらメッセージ表示
+            - 新しいタスクを入力し、期限日を設定して、登録ボタンを押すとaddtask.phpへ
+            - 編集ボタンをクリックするとedittask.phpへ
+            - 削除ボタンをクリックするとdeletetask.phpへ
 
-    タスク追加
+    - タスク追加
 
-    - addtask.php
+        - addtask.php
 
-        - index.phpからPOSTで値を受け取る
-        - 未入力か50文字以上をバリデーションし$errにメッセージを入れて表示
-        - $errが0の時TaskLogit::addTask();を実行
-        - 登録が成功したらindex.phpに戻す
+            - index.phpからPOSTで値を受け取る
+            - 未入力か50文字以上をバリデーションし$errにメッセージを入れて表示
+            - $errが0の時TaskLogit::addTask();を実行
+            - 登録が成功したらindex.phpに戻す
 
-    タスク内容編集
+    - タスク内容編集
 
-    - edittask.php
+        - edittask.php
 
-        - index.phpからGETでタスクのidを受け取る
-        - TaskLogit::getTaskById();でタスク内容を取得し表示
-        - 変更内容を入力しcomp_edit.phpへ送信
+            - index.phpからGETでタスクのidを受け取る
+            - TaskLogit::getTaskById();でタスク内容を取得し表示
+            - 変更内容を入力しcomp_edit.phpへ送信
 
-    - comp_edit.php
+        - comp_edit.php
 
-        - edittask.phpからPOSTでidとedited_taskを受け取る
-        - TaskLogit::editTask();でタスク内容を変更
-        - 成功したらindex.phpへ戻す
+            - edittask.phpからPOSTでidとedited_taskを受け取る
+            - TaskLogit::editTask();でタスク内容を変更
+            - 成功したらindex.phpへ戻す
 
-    タスク削除
+    - タスク削除
 
-    - deletetask.php
+        - deletetask.php
 
-        - index.phpからGETでタスクのidを受け取る
-        - TaskLogit::getTaskById();でタスク内容を取得し表示
-        - 確認ボタンを押すとcomp_delete.phpへ送信
+            - index.phpからGETでタスクのidを受け取る
+            - TaskLogit::getTaskById();でタスク内容を取得し表示
+            - 確認ボタンを押すとcomp_delete.phpへ送信
 
-    - comp_delete.php
+        - comp_delete.php
 
-        - deleetask.phpからPOSTでidを受け取る
-        - TaskLogit::deleteTask();でタスクを削除
-        - 成功したらindex.phpへ戻す
+            - deleetask.phpからPOSTでidを受け取る
+            - TaskLogit::deleteTask();でタスクを削除
+            - 成功したらindex.phpへ戻す
 
     その他
 
-    - env.php
+        - env.php
 
-        - データベースのデータを定数で定義
-  
-    - dbconnect.php
+            - データベースのデータを定数で定義
 
-        - データベース接続を行う関数。$pdoを返す
+        - dbconnect.php
 
-    - functions.php
-  
-        - セキュリティ対策の関数。エスケープ処理。
+            - データベース接続を行う関数。$pdoを返す
+
+        - functions.php
+
+            - セキュリティ対策の関数。エスケープ処理。
     
 ### 〇アップデート
   
