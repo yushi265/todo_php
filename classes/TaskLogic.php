@@ -1,6 +1,7 @@
 <?php
 
 require_once('../dbconnect.php');
+require_once('../functions.php');
 
 class TaskLogic {
 
@@ -30,12 +31,15 @@ class TaskLogic {
   public static function addTask($task) {
     $result = false;
 
-    $sql = "INSERT INTO task (task) VALUES (?)";//プレースホルダー
+    $sql = "INSERT INTO task (task, created, due_date) VALUES (?, ?, ?)";//プレースホルダー
 
     $arr = [];
     $arr[] = $task['task'];
+    $arr[] = getNow();
+    $arr[] = date("Y")."/".$task['due_date'];
 
     echo $task['task'];
+    echo date("Y/m/d H:i:s");
 
     try {
       $stmt = connect()->prepare($sql);

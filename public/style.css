@@ -1,19 +1,19 @@
 .container {
   padding-top: 20px;
-  width: 550px;
+  width: 800px;
 }
 .input_task {
   width: 350px;
 }
-.list-group-item p {
-  display: inline-block;
+.task_list{
+  background-color: white;
 }
 .btn_group {
   text-align: right;
 }
 
-@media screen and (max-width:380px) {
+/* @media screen and (max-width:380px) {
     .header {
         width: 350px;
     }
-}
+} */
