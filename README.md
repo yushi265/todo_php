@@ -2,24 +2,21 @@
 
 ### 〇ファイル構成
 
-     インデックス
-
+     インデックス  
         - index.php  
             - 全タスクを取得して一覧表示、取得できなかったらメッセージ表示
             - 新しいタスクを入力し、期限日を設定して、登録ボタンを押すとaddtask.phpへ
             - 編集ボタンをクリックするとedittask.phpへ
             - 削除ボタンをクリックするとdeletetask.phpへ
 
-    - タスク追加
-
+    タスク追加  
         - addtask.php  
             - index.phpからPOSTで値を受け取る
             - 未入力か50文字以上をバリデーションし$errにメッセージを入れて表示
             - $errが0の時TaskLogit::addTask();を実行
             - 登録が成功したらindex.phpに戻す
 
-    - タスク内容編集
-
+    タスク内容編集  
         - edittask.php  
             - index.phpからGETでタスクのidを受け取る
             - TaskLogit::getTaskById();でタスク内容を取得し表示
@@ -30,8 +27,7 @@
             - TaskLogit::editTask();でタスク内容を変更
             - 成功したらindex.phpへ戻す
 
-    - タスク削除
-
+    タスク削除  
         - deletetask.php  
             - index.phpからGETでタスクのidを受け取る
             - TaskLogit::getTaskById();でタスク内容を取得し表示
@@ -42,8 +38,7 @@
             - TaskLogit::deleteTask();でタスクを削除
             - 成功したらindex.phpへ戻す
 
-    その他
-
+    その他  
         - env.php  
             - データベースのデータを定数で定義
 
