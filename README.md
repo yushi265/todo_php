@@ -1,6 +1,8 @@
 ## <todo_php> phpでデータベースを用いてタスク管理を行うアプリ。
 
-### 〇インデックス
+### 〇ファイル構成
+
+  インデックス
 
   - index.php
 
@@ -9,7 +11,7 @@
         - 編集ボタンをクリックするとedittask.phpへ
         - 削除ボタンをクリックするとdeletetask.phpへ
 
-### 〇タスク追加
+  タスク追加
 
   - addtask.php
 
@@ -32,7 +34,7 @@
         - TaskLogit::editTask();でタスク内容を変更
         - 成功したらindex.phpへ戻す
 
-### 〇タスク削除
+  タスク削除
 
   - deletetask.php
 
@@ -46,7 +48,7 @@
         - TaskLogit::deleteTask();でタスクを削除
         - 成功したらindex.phpへ戻す
 
-### 〇その他
+  その他
 
   - env.php
 
