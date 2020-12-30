@@ -1,8 +1,17 @@
 <?php
+session_start();
+
 require_once('../classes/UserLogic.php');
 
 //エラーメッセージ
 $err = [];
+
+$token = filter_input(INPUT_POST, 'csrf_token');
+if(!isset($_SESSION['csrf_token']) || $token !== $_SESSION['csrf_token']) {
+  exit('不正なリクエストです');
+}
+unset($_SESSION['csrf_token']);
+
 //バリデーション
 if(!$name = filter_input(INPUT_POST, 'name')) {
   $err[] = 'お名前が入力されていません';
@@ -54,7 +63,12 @@ if(count($err) === 0) {
         <p>登録が完了しました</p>
       <?php endif ?>
     </div>
-    <a href="login_form.php">←戻る</a>
+    <?php if(count($err) > 0): ?>
+      <a href="signup_form.php">←戻る</a>
+    <?php else: ?>
+      <a href="login_form.php">←戻る</a>
+    <?php endif ?>
+
   </div>
 </body>
 </html>

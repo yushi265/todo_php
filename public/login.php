@@ -48,7 +48,7 @@ if(!$result) {
         <p>ログインしました</p>
       <?php endif ?>
     </div>
-    <a href="mypage.php">マイページへ→</a>
+    <a href="index.php">マイページへ→</a>
   </div>
 </body>
 </html>

@@ -1,3 +1,18 @@
+<?php
+
+session_start();
+
+require_once('../classes/UserLogic.php');
+require_once('../functions.php');
+
+$result = UserLogic::checkLogin();
+if($result) {
+  header('Location: mypage.php');
+  return;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -29,9 +44,11 @@
           <label>パスワード確認：</label>
           <input type="text" name="password_conf">
         </p>
+        <input type="hidden" name="csrf_token" value="<?php echo h(setToken()); ?>">
         <button type="submit" class="btn btn-primary">登録</button>
       </form>
     </div>
+    <a href="login_form.php">←戻る</a>
   </div>
 </body>
 </html>

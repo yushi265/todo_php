@@ -2,7 +2,19 @@
 
 session_start();
 
+require_once('../classes/UserLogic.php');
+require_once('../functions.php');
+
+$result = UserLogic::checkLogin();
+if($result) {
+  header('Location: mypage.php');
+  return;
+}
+
 $err = $_SESSION;
+
+$login_err = isset($err['login_err']) ? $err['login_err'] : null;
+unset($err['login_err']);
 
 $_SESSION = array();
 session_destroy();
@@ -26,7 +38,11 @@ session_destroy();
         <?php if(isset($err['mdg'])): ?>
           <?php echo $err['msg'] ?>
         <?php endif ?>
-        <p>必要事項を入力してください</p>
+        <?php if(isset($login_err)): ?>
+          <?php echo h($login_err) ?>
+        <?php else: ?>
+          <p>必要事項を入力してください</p>
+        <?php endif ?>
         <p>
           <label>メールアドレス：</label>
           <input type="email" name="email">
@@ -40,6 +56,9 @@ session_destroy();
           <?php if(isset($err['password'])): ?>
             <?php echo $err['password'] ?>
           <?php endif ?>
+        </p>
+        <p>
+            <a href="signup_form.php">→新規登録</a>
         </p>
         <button type="submit" class="btn btn-primary">ログイン</button>
       </form>
