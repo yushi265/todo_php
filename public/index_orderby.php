@@ -16,14 +16,7 @@ if(!$result) {
 
 //ユーザー全タスク取得
 $user_id = $_SESSION['login_user']['id'];
-// $tasklist = TaskLogic::getUserTaskList($user_id);
-
-
-if(isset($_GET['order'])) {
-  $tasklist = TaskLogic::taskOrderBy($user_id, $_GET['order']);
-} else {
-  $tasklist = TaskLogic::getUserTaskList($user_id);
-}
+$tasklist = TaskLogic::taskOrderBy($user_id);
 
 if(!isset($tasklist)) {
   exit('表示できませんでした');
@@ -84,7 +77,7 @@ if(!isset($tasklist)) {
               <tr>
                 <th scope="col">タスク(<?php echo count($tasklist) ?>)</th>
                 <th scope="col"><a href="index.php">追加日</a></th>
-                <th scope="col"><a href="index_orderby.php">期限日</a></th>
+                <th scope="col"><a href="index_orderby.php">期限日</th>
               </tr>
             </thead>
             <tbody>

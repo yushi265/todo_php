@@ -7,15 +7,37 @@ class TaskLogic {
 
   /**
    * タスク一覧表示
-   * @param void
+   * @param string $user_id
    * @return array $list
    */
-  public static function getTaskList() {
-    $sql = "SELECT * FROM task";
+  public static function getUserTaskList($user_id) {
+    $sql = "SELECT * FROM task WHERE user_id = ?";
+
+    $arr = [];
+    $arr[] = $user_id;
 
     try {
       $stmt = connect()->prepare($sql);
-      $stmt->execute();
+      $stmt->execute($arr);
+      $tasklist = $stmt->fetchall();
+      return $tasklist;
+    } catch(\Exeption $e) {
+      exit('表示できませんでした');
+    }
+  }
+
+  /**
+   * 期限日昇順並び替え
+   */
+  public static function taskOrderBy($user_id) {
+    $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY due_date ASC";
+
+    $arr = [];
+    $arr[] = $user_id;
+
+    try {
+      $stmt = connect()->prepare($sql);
+      $stmt->execute($arr);
       $tasklist = $stmt->fetchall();
       return $tasklist;
     } catch(\Exeption $e) {
@@ -31,15 +53,13 @@ class TaskLogic {
   public static function addTask($task) {
     $result = false;
 
-    $sql = "INSERT INTO task (task, created, due_date) VALUES (?, ?, ?)";//プレースホルダー
+    $sql = "INSERT INTO task (task, created, due_date, user_id) VALUES (?, ?, ?, ?)";//プレースホルダー
 
     $arr = [];
     $arr[] = $task['task'];
     $arr[] = getNow();
-    $arr[] = date("Y")."/".$task['due_date'];
-
-    echo $task['task'];
-    echo date("Y/m/d H:i:s");
+    $arr[] = $task['due_date'];
+    $arr[] = $task['user_id'];
 
     try {
       $stmt = connect()->prepare($sql);

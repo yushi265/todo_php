@@ -52,7 +52,7 @@ session_destroy();
         </p>
         <p>
           <label>パスワード：</label>
-          <input type="text" name="password">
+          <input type="password" name="password">
           <?php if(isset($err['password'])): ?>
             <?php echo $err['password'] ?>
           <?php endif ?>

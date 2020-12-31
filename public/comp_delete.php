@@ -2,7 +2,7 @@
 
 require_once('../classes/TaskLogic.php');
 
-$id = $_POST['id'];
+$id = $_POST['task_id'];
 
 $result = TaskLogic::deleteTask($id);
 

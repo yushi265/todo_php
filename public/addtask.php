@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once('../classes/TaskLogic.php');
 
@@ -12,7 +13,14 @@ if(!$task) {
 if(mb_strlen($task) > 50) {
   $err[] = '50文字以内で入力してください';
 }
-if(count($err) === 0) {
+
+$userTask = TaskLogic::getUserTaskList($_SESSION['login_user']['id']);
+
+if(count($userTask) > 20) {
+  $err[] = '登録できるのは２０個までです';
+}
+
+if(count($err) === 0 && count($userTask) <= 20) {
   $hasAdded = TaskLogic::addTask($_POST);
   header('Location: index.php');
 
