@@ -17,7 +17,7 @@
             - 登録が成功したらindex.phpに戻す
 
     タスク内容編集  
-        - edittask.php  
+        - edit_task.php  
             - index.phpからGETでタスクのidを受け取る
             - TaskLogit::getTaskById();でタスク内容を取得し表示
             - 変更内容を入力しcomp_edit.phpへ送信
@@ -28,7 +28,7 @@
             - 成功したらindex.phpへ戻す
 
     タスク削除  
-        - deletetask.php  
+        - delete_task.php  
             - index.phpからGETでタスクのidを受け取る
             - TaskLogit::getTaskById();でタスク内容を取得し表示
             - 確認ボタンを押すとcomp_delete.phpへ送信
