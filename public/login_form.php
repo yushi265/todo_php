@@ -5,14 +5,15 @@ session_start();
 require_once('../classes/UserLogic.php');
 require_once('../functions.php');
 
+//ログインチェック
 $result = UserLogic::checkLogin();
 if($result) {
   header('Location: mypage.php');
   return;
 }
 
+//リロード対策
 $err = $_SESSION;
-
 $login_err = isset($err['login_err']) ? $err['login_err'] : null;
 unset($err['login_err']);
 
@@ -35,6 +36,7 @@ session_destroy();
     <h3>ログインフォーム</h3>
     <div class="alert alert-primary" role="alert">
       <form action="login.php" method="post">
+        <!-- エラー表示 -->
         <?php if(isset($err['mdg'])): ?>
           <?php echo $err['msg'] ?>
         <?php endif ?>
@@ -43,6 +45,7 @@ session_destroy();
         <?php else: ?>
           <p>必要事項を入力してください</p>
         <?php endif ?>
+        <!-- 入力部分 -->
         <p>
           <label>メールアドレス：</label>
           <input type="email" name="email">

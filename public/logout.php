@@ -4,17 +4,19 @@ session_start();
 
 require_once('../classes/UserLogic.php');
 
+//バリデーション
 if(!filter_input(INPUT_POST, 'logout')) {
   exit('不正なリクエストです');
 }
 
+//ログインチェック
 $result = UserLogic::checkLogin();
 if(!$result) {
   exit('セッションが切れましたのでログインし直してください');
 }
 
+//ログアウト処理
 UserLogic::logout();
-
 ?>
 
 <!DOCTYPE html>

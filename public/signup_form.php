@@ -5,6 +5,7 @@ session_start();
 require_once('../classes/UserLogic.php');
 require_once('../functions.php');
 
+//ログインチェック
 $result = UserLogic::checkLogin();
 if($result) {
   header('Location: mypage.php');

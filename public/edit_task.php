@@ -13,9 +13,9 @@ if(!$result) {
   return;
 }
 
+//ログインユーザーのタスクを取得
 $user_id = $_SESSION['login_user']['id'];
-
-$tasks = TaskLogic::getUserTaskList($user_id);
+$tasks = TaskLogic::getUserTaskList($user_id,'id');
 
 ?>
 

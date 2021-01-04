@@ -6,6 +6,7 @@ require_once('../classes/UserLogic.php');
 //エラーメッセージ
 $err = [];
 
+//CSRF対策トークン
 $token = filter_input(INPUT_POST, 'csrf_token');
 if(!isset($_SESSION['csrf_token']) || $token !== $_SESSION['csrf_token']) {
   exit('不正なリクエストです');
@@ -28,6 +29,7 @@ if($password_conf !== $password) {
   $err[] = '確認用パスワードが一致していません';
 }
 
+//エラーがなければユーザー登録
 if(count($err) === 0) {
   $result = UserLogic::createUser($_POST);
 

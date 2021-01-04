@@ -5,6 +5,7 @@ require_once('../classes/TaskLogic.php');
 
 //エラーメッセージ
 $err = [];
+
 //バリデーション
 $task = filter_input(INPUT_POST, 'task');
 if(!$task) {
@@ -14,13 +15,14 @@ if(mb_strlen($task) > 50) {
   $err[] = '50文字以内で入力してください';
 }
 
-$userTask = TaskLogic::getUserTaskList($_SESSION['login_user']['id']);
+$taskCount = TaskLogic::countUserTask($_SESSION['login_user']['id']);
 
-if(count($userTask) > 20) {
+if($taskCount > 20) {
   $err[] = '登録できるのは２０個までです';
 }
 
-if(count($err) === 0 && count($userTask) <= 20) {
+//エラーがなければタスクを登録
+if(count($err) === 0 && $taskCount <= 20) {
   $hasAdded = TaskLogic::addTask($_POST);
   header('Location: index.php');
 
@@ -28,8 +30,8 @@ if(count($err) === 0 && count($userTask) <= 20) {
     $err[] = '登録に失敗しました。';
   }
 }
-
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -51,7 +53,5 @@ if(count($err) === 0 && count($userTask) <= 20) {
       <button type="buttom" class="btn btn-primary">←戻る</button>
     </a>
   </div>
-
-
 </body>
 </html>

@@ -14,16 +14,15 @@ if(!$result) {
   return;
 }
 
+//クエリストリングがないとき追加日昇順へリンク
+if(empty($_GET['sort']) || empty($_GET['order'])) {
+  header('Location: index.php?sort=created&order=asc');
+  return;
+}
+
 //ユーザー全タスク取得
 $user_id = $_SESSION['login_user']['id'];
-// $tasklist = TaskLogic::getUserTaskList($user_id);
-
-
-if(isset($_GET['order'])) {
-  $tasklist = TaskLogic::taskOrderBy($user_id, $_GET['order']);
-} else {
-  $tasklist = TaskLogic::getUserTaskList($user_id);
-}
+$tasklist = TaskLogic::getUserTaskList($user_id,$_GET['sort'],$_GET['order']);
 
 if(!isset($tasklist)) {
   exit('表示できませんでした');
@@ -83,9 +82,27 @@ if(!isset($tasklist)) {
             <thead>
               <tr>
                 <th scope="col">タスク(<?php echo count($tasklist) ?>)</th>
-                <th scope="col"><a href="index.php">追加日</a></th>
-                <th scope="col"><a href="index_orderby.php">期限日</a></th>
+
+                <?php if($_GET['sort'] === 'created'): ?>
+                  <?php if($_GET['order'] === 'asc'):?>
+                    <th scope="col"><a href="index.php?sort=created&order=desc">追加日</a></th>
+                  <?php else: ?>
+                    <th scope="col"><a href="index.php?sort=created&order=asc">追加日</a></th>
+                  <?php endif ?>
+                  <th scope="col"><a href="index.php?sort=due_date&order=asc">期限日</a></th>
+                <?php endif ?>
+
+                <?php if($_GET['sort'] === 'due_date'): ?>
+                  <th scope="col"><a href="index.php?sort=created&order=asc">追加日</a></th>
+                  <?php if($_GET['order'] === 'asc'):?>
+                    <th scope="col"><a href="index.php?sort=due_date&order=desc">期限日</a></th>
+                  <?php else: ?>
+                    <th scope="col"><a href="index.php?sort=due_date&order=asc">期限日</a></th>
+                  <?php endif ?>
+                <?php endif ?>
               </tr>
+              <!-- <th scope="col"><a href="index.php?sort=created&order=asc">追加日</a></th>
+              <th scope="col"><a href="index.php?sort=due_date&order=asc">期限日</a></th> -->
             </thead>
             <tbody>
               <?php foreach ($tasklist as $task): ?>

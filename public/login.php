@@ -5,6 +5,7 @@ require_once('../classes/UserLogic.php');
 
 //エラーメッセージ
 $err = [];
+
 //バリデーション
 if(!$email = filter_input(INPUT_POST, 'email')) {
   $err['email'] = 'メールアドレスが入力されていません';
@@ -12,20 +13,19 @@ if(!$email = filter_input(INPUT_POST, 'email')) {
 if(!$password = filter_input(INPUT_POST, 'password')) {
   $err['password'] = 'パスワードが入力されていません';
 }
+//エラーがあるときはセッションに入れて戻す
 if(count($err) > 0) {
   $_SESSION = $err;
   header('Location: login_form.php');
   return;
 }
 
+//ログイン処理
 $result = UserLogic::login($email, $password);
-
 if(!$result) {
   header('Location: login_form.php');
   return;
 }
-
-
 ?>
 
 <!DOCTYPE html>

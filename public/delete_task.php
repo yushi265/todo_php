@@ -6,6 +6,7 @@ require_once('../functions.php');
 require_once('../classes/TaskLogic.php');
 require_once('../classes/UserLogic.php');
 
+//ログインチェック
 $result = UserLogic::checkLogin();
 if(!$result) {
   $_SESSION['login_err'] = 'ログインしてください';
@@ -13,9 +14,9 @@ if(!$result) {
   return;
 }
 
+//ログインユーザーのタスクを取得
 $user_id = $_SESSION['login_user']['id'];
-
-$tasks = TaskLogic::getUserTaskList($user_id);
+$tasks = TaskLogic::getUserTaskList($user_id,'id');
 
 ?>
 

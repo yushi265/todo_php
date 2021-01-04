@@ -10,27 +10,28 @@ class TaskLogic {
    * @param string $user_id
    * @return array $list
    */
-  public static function getUserTaskList($user_id) {
-    $sql = "SELECT * FROM task WHERE user_id = ?";
+  public static function getUserTaskList($user_id, $sort, $order) {
+    switch($sort) {
+      case 'due_date':
+        if($order === 'asc') {
+          $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY due_date ASC";
+        } else {
+          $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY due_date DESC";
+        }
+        break;
 
-    $arr = [];
-    $arr[] = $user_id;
+      case 'created':
+        if($order === 'asc') {
+          $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY created ASC";
+        } else {
+          $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY created DESC";
+        }
+        break;
 
-    try {
-      $stmt = connect()->prepare($sql);
-      $stmt->execute($arr);
-      $tasklist = $stmt->fetchall();
-      return $tasklist;
-    } catch(\Exeption $e) {
-      exit('表示できませんでした');
+      case 'id':
+        $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY id ASC";
+        break;
     }
-  }
-
-  /**
-   * 期限日昇順並び替え
-   */
-  public static function taskOrderBy($user_id) {
-    $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY due_date ASC";
 
     $arr = [];
     $arr[] = $user_id;
@@ -93,7 +94,7 @@ class TaskLogic {
 
   /**
    * タスクを編集する
-   * @param string $id
+   * @param int $id
    * @param string $edited_task
    * @return bool $result
    */
@@ -115,7 +116,7 @@ class TaskLogic {
 
   /**
    * タスクを削除する
-   * @param string $task_id
+   * @param int $task_id
    * @return bool $result
    */
   public static function deleteTask($task_id) {
@@ -132,6 +133,25 @@ class TaskLogic {
       exit('表示できませんでした');
     }
   }
-}
 
+  /**
+   * ユーザーのタスクをカウント
+   * @param int $user_id
+   * @return int $result
+   */
+  public static function countUserTask($user_id) {
+    $sql = "SELECT COUNT(*) FROM task WHERE user_id = ?";
+
+    $arr = [];
+    $arr[] = $user_id;
+
+    try {
+      $stmt = connect()->prepare($sql);
+      $result = $stmt->execute($arr);
+      return $result;
+    } catch(\Exeption $e) {
+      exit('表示できませんでした');
+    }
+  }
+}
 ?>
