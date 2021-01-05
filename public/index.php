@@ -6,7 +6,7 @@ require_once('../functions.php');
 require_once('../classes/TaskLogic.php');
 require_once('../classes/UserLogic.php');
 
-//ログインチェック
+// ログインチェック
 $result = UserLogic::checkLogin();
 if(!$result) {
   $_SESSION['login_err'] = 'ログインしてください';
@@ -14,15 +14,39 @@ if(!$result) {
   return;
 }
 
-//クエリストリングがないとき追加日昇順へリンク
-if(empty($_GET['sort']) || empty($_GET['order'])) {
-  header('Location: index.php?sort=created&order=asc');
-  return;
+$user_id = $_SESSION['login_user']['id'];
+$sort = $_GET['sort'];
+$order = $_GET['order'];
+
+$limit = TaskLogic::getLimit();
+$max_page = TaskLogic::getMaxPage($user_id);
+$max_task = TaskLogic::countUserTask($user_id);
+
+if(isset($_GET['page'])) {
+  $page = $_GET['page'];
+} else {
+  $page = 1;
 }
 
-//ユーザー全タスク取得
-$user_id = $_SESSION['login_user']['id'];
-$tasklist = TaskLogic::getUserTaskList($user_id,$_GET['sort'],$_GET['order']);
+// // URLバリデーション
+// // クエリストリングがない時
+// if(empty($sort) || empty($order)) {
+//   header('Location: index.php?sort=created&order=asc');
+//   return;
+// }
+// // $sortがcreated,due_date以外の時
+// if($sort !== 'created' && $sort !== 'due_date') {
+//   header('Location: index.php?sort=created&order=asc');
+//   return;
+// }
+// // $orderがasc,desc以外の時
+// if($order !== 'asc' && $order !== 'desc') {
+//   header('Location: index.php?sort=created&order=asc');
+//   return;
+// }
+
+// ユーザー全タスク取得
+$tasklist = TaskLogic::getUserTaskList($user_id, $sort, $order, $page);
 
 if(!isset($tasklist)) {
   exit('表示できませんでした');
@@ -66,7 +90,7 @@ if(!isset($tasklist)) {
             </option>
           <?php endfor ?>
         </select>
-        <input type="hidden" name="user_id" value="<?php echo $_SESSION['login_user']['id'] ?>">
+        <input type="hidden" name="user_id" value="<?php echo $user_id ?>">
         <button type="submit" class="btn btn-primary">登録
         </button>
       </form>
@@ -81,7 +105,7 @@ if(!isset($tasklist)) {
           <table class="table table-striped">
             <thead>
               <tr>
-                <th scope="col">タスク(<?php echo count($tasklist) ?>)</th>
+                <th scope="col">タスク(<?php echo $max_task ?>)</th>
 
                 <?php if($_GET['sort'] === 'created'): ?>
                   <?php if($_GET['order'] === 'asc'):?>
@@ -125,6 +149,16 @@ if(!isset($tasklist)) {
           </table>
         </div>
       <?php endif ?>
+
+      <div class="page">
+        <?php for($i = 1; $i <= $max_page; $i++): ?>
+          <?php if($page == $i): ?>
+            <?php echo $i."　" ?>
+            <?php continue; ?>
+          <?php endif ?>
+          <a href="index.php?sort=<?php echo $sort ?>&order=<?php echo $order ?>&page=<?php echo $i ?>"><?php echo $i ?></a>　
+        <?php endfor ?>
+      </div>
     </div>
 
     <!-- ログアウト -->

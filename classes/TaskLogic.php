@@ -6,32 +6,39 @@ require_once('../functions.php');
 class TaskLogic {
 
   /**
+   * リミットを5に固定
+   * @return int 5
+  */
+  public static function getLimit() {
+    return 5;
+  }
+
+  /**
+   * 最大のページ数を取得
+   * @param int $user_id
+   * @return int $result
+   */
+  public static function getMaxPage($user_id) {
+    $taskCount = self::countUserTask($user_id);
+    $limit = self::getLimit();
+    $result = ceil($taskCount / $limit);
+    return $result;
+  }
+
+  /**
    * タスク一覧表示
    * @param string $user_id
+   * @param string $sort
+   * @param string $order
    * @return array $list
    */
-  public static function getUserTaskList($user_id, $sort, $order) {
-    switch($sort) {
-      case 'due_date':
-        if($order === 'asc') {
-          $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY due_date ASC";
-        } else {
-          $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY due_date DESC";
-        }
-        break;
+  public static function getUserTaskList($user_id, $sort, $order, $page) {
+    $limit = self::getLimit();
 
-      case 'created':
-        if($order === 'asc') {
-          $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY created ASC";
-        } else {
-          $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY created DESC";
-        }
-        break;
+    $offset_num = $limit * ($page - 1);
 
-      case 'id':
-        $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY id ASC";
-        break;
-    }
+    $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY ".$sort." ".$order;
+    $sql .= " LIMIT ".$offset_num.",".$limit;
 
     $arr = [];
     $arr[] = $user_id;
@@ -147,7 +154,8 @@ class TaskLogic {
 
     try {
       $stmt = connect()->prepare($sql);
-      $result = $stmt->execute($arr);
+      $stmt->execute($arr);
+      $result = $stmt->fetchColumn();
       return $result;
     } catch(\Exeption $e) {
       exit('表示できませんでした');

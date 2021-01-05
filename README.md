@@ -57,8 +57,16 @@
     - 12/30 ログアウト、ログインチェック、CSRF対策  
     - 12/31 ソート機能、編集・削除にページ追加  
     - 1/4 クエリストリングでソート、ボタン一つで昇降順切替可に
+    - 1/5 ページネーション追加
   
 ### 〇追加したい機能
 
     - ページネーション  
     - 検索  
+  
+### 〇メモ
+    - SQL文、ORDER BYに変数を代入する場合
+    - × $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY :sort :order;
+    - プレースホルダーを使うとエラーになるため、
+    - 〇 $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY ".$sort." ".$order;
+    - とするとうまくいく。
