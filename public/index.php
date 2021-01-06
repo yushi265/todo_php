@@ -14,10 +14,30 @@ if(!$result) {
   return;
 }
 
-$user_id = $_SESSION['login_user']['id'];
-$sort = $_GET['sort'];
-$order = $_GET['order'];
+// URLバリデーション
+if(isset($_GET['sort'])) {
+  if($_GET['sort'] !== "created" && $_GET['sort'] !== "due_date") {
+    header('Location: index.php');
+    return;
+  } else {
+    $sort = $_GET['sort'];
+  }
+} else {
+  $sort = "created";
+}
 
+if(isset($_GET['order'])) {
+  if($_GET['order'] !== "asc" && $_GET['order'] !== "desc") {
+    header('Location: index.php');
+    return;
+  } else {
+    $order = $_GET['order'];
+  }
+} else {
+  $order = "asc";
+}
+
+$user_id = $_SESSION['login_user']['id'];
 $limit = TaskLogic::getLimit();
 $max_page = TaskLogic::getMaxPage($user_id);
 $max_task = TaskLogic::countUserTask($user_id);
@@ -28,25 +48,8 @@ if(isset($_GET['page'])) {
   $page = 1;
 }
 
-// // URLバリデーション
-// // クエリストリングがない時
-// if(empty($sort) || empty($order)) {
-//   header('Location: index.php?sort=created&order=asc');
-//   return;
-// }
-// // $sortがcreated,due_date以外の時
-// if($sort !== 'created' && $sort !== 'due_date') {
-//   header('Location: index.php?sort=created&order=asc');
-//   return;
-// }
-// // $orderがasc,desc以外の時
-// if($order !== 'asc' && $order !== 'desc') {
-//   header('Location: index.php?sort=created&order=asc');
-//   return;
-// }
-
 // ユーザー全タスク取得
-$tasklist = TaskLogic::getUserTaskList($user_id, $sort, $order, $page);
+$tasklist = TaskLogic::getUserTask($user_id, $sort, $order, $page);
 
 if(!isset($tasklist)) {
   exit('表示できませんでした');
@@ -61,6 +64,7 @@ if(!isset($tasklist)) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
   <title>タスクリスト</title>
 </head>
@@ -106,28 +110,39 @@ if(!isset($tasklist)) {
             <thead>
               <tr>
                 <th scope="col">タスク(<?php echo $max_task ?>)</th>
-
-                <?php if($_GET['sort'] === 'created'): ?>
-                  <?php if($_GET['order'] === 'asc'):?>
-                    <th scope="col"><a href="index.php?sort=created&order=desc">追加日</a></th>
+                <!-- ソートが追加日の時 -->
+                <?php if($sort === 'created'): ?>
+                  <?php if($order === 'asc'):?>
+                    <th scope="col">
+                      <a href="index.php?sort=created&order=desc">追加日<i class="fas fa-sort-up"></i></a>
+                    </th>
                   <?php else: ?>
-                    <th scope="col"><a href="index.php?sort=created&order=asc">追加日</a></th>
+                    <th scope="col">
+                      <a href="index.php?sort=created&order=asc">追加日<i class="fas fa-sort-down"></i></a>
+                    </th>
                   <?php endif ?>
-                  <th scope="col"><a href="index.php?sort=due_date&order=asc">期限日</a></th>
+                  <th scope="col">
+                    <a href="index.php?sort=due_date">期限日<i class="fas fa-sort"></i></a>
+                  </th>
                 <?php endif ?>
-
-                <?php if($_GET['sort'] === 'due_date'): ?>
-                  <th scope="col"><a href="index.php?sort=created&order=asc">追加日</a></th>
-                  <?php if($_GET['order'] === 'asc'):?>
-                    <th scope="col"><a href="index.php?sort=due_date&order=desc">期限日</a></th>
+                <!-- ソートが期限日の時 -->
+                <?php if($sort === 'due_date'): ?>
+                  <th scope="col">
+                    <a href="index.php?sort=created">追加日<i class="fas fa-sort"></i></a>
+                  </th>
+                  <?php if($order === 'asc'):?>
+                    <th scope="col">
+                      <a href="index.php?sort=due_date&order=desc">期限日<i class="fas fa-sort-up"></i></a>
+                    </th>
                   <?php else: ?>
-                    <th scope="col"><a href="index.php?sort=due_date&order=asc">期限日</a></th>
+                    <th scope="col">
+                      <a href="index.php?sort=due_date&order=asc">期限日<i class="fas fa-sort-down"></i></a>
+                    </th>
                   <?php endif ?>
                 <?php endif ?>
               </tr>
-              <!-- <th scope="col"><a href="index.php?sort=created&order=asc">追加日</a></th>
-              <th scope="col"><a href="index.php?sort=due_date&order=asc">期限日</a></th> -->
             </thead>
+
             <tbody>
               <?php foreach ($tasklist as $task): ?>
                 <tr>
@@ -151,6 +166,14 @@ if(!isset($tasklist)) {
       <?php endif ?>
 
       <div class="page">
+        <label>
+          <?php if($page == 1): ?>
+            　<i class="fas fa-angle-double-left fa-xs"></i>　
+          <?php else: ?>
+            　<a href="index.php?sort=<?php echo $sort ?>&order=<?php echo $order ?>&page=<?php echo $page - 1 ?>"><i class="fas fa-angle-double-left fa-xs"></i></a>　
+          <?php endif ?>
+        </label>
+
         <?php for($i = 1; $i <= $max_page; $i++): ?>
           <?php if($page == $i): ?>
             <?php echo $i."　" ?>
@@ -158,6 +181,14 @@ if(!isset($tasklist)) {
           <?php endif ?>
           <a href="index.php?sort=<?php echo $sort ?>&order=<?php echo $order ?>&page=<?php echo $i ?>"><?php echo $i ?></a>　
         <?php endfor ?>
+
+        <label>
+          <?php if($page == 3): ?>
+            <i class="fas fa-angle-double-right fa-xs"></i>
+          <?php else: ?>
+            <a href="index.php?sort=<?php echo $sort ?>&order=<?php echo $order ?>&page=<?php echo $page + 1 ?>"><i class="fas fa-angle-double-right fa-xs"></i></a>　
+          <?php endif ?>
+        </label>
       </div>
     </div>
 

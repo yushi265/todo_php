@@ -7,10 +7,10 @@ class TaskLogic {
 
   /**
    * リミットを5に固定
-   * @return int 5
+   * @return int $limit
   */
   public static function getLimit() {
-    return 5;
+    return $limit = 5;
   }
 
   /**
@@ -32,13 +32,35 @@ class TaskLogic {
    * @param string $order
    * @return array $list
    */
-  public static function getUserTaskList($user_id, $sort, $order, $page) {
+  public static function getUserTask($user_id, $sort, $order, $page) {
     $limit = self::getLimit();
 
     $offset_num = $limit * ($page - 1);
 
     $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY ".$sort." ".$order;
     $sql .= " LIMIT ".$offset_num.",".$limit;
+
+    $arr = [];
+    $arr[] = $user_id;
+
+    try {
+      $stmt = connect()->prepare($sql);
+      $stmt->execute($arr);
+      $tasklist = $stmt->fetchall();
+      return $tasklist;
+    } catch(\Exeption $e) {
+      exit('表示できませんでした');
+    }
+  }
+
+  /**
+   * タスク一覧表示
+   * @param string $user_id
+   * @return array $list
+   */
+  public static function getUserTaskAll($user_id) {
+
+    $sql = "SELECT * FROM task WHERE user_id = ?";
 
     $arr = [];
     $arr[] = $user_id;
