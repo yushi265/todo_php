@@ -6,7 +6,7 @@ require_once('../functions.php');
 class TaskLogic {
 
   /**
-   * リミットを5に固定
+   * リミットを取得
    * @return int $limit
   */
   public static function getLimit() {

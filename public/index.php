@@ -109,34 +109,34 @@ if(!isset($tasklist)) {
           <table class="table table-striped">
             <thead>
               <tr>
-                <th scope="col">タスク(<?php echo $max_task ?>)</th>
+                <th scope="col">タスク&nbsp;(<?php echo $max_task ?>)</th>
                 <!-- ソートが追加日の時 -->
                 <?php if($sort === 'created'): ?>
                   <?php if($order === 'asc'):?>
                     <th scope="col">
-                      <a href="index.php?sort=created&order=desc">追加日<i class="fas fa-sort-up"></i></a>
+                      <a href="index.php?sort=created&order=desc">追加日&nbsp;<i class="fas fa-sort-up fa-xs"></i></a>
                     </th>
                   <?php else: ?>
                     <th scope="col">
-                      <a href="index.php?sort=created&order=asc">追加日<i class="fas fa-sort-down"></i></a>
+                      <a href="index.php?sort=created&order=asc">追加日&nbsp;<i class="fas fa-sort-down fa-xs"></i></a>
                     </th>
                   <?php endif ?>
                   <th scope="col">
-                    <a href="index.php?sort=due_date">期限日<i class="fas fa-sort"></i></a>
+                    <a href="index.php?sort=due_date">期限日&nbsp;<i class="fas fa-sort fa-xs"></i></a>
                   </th>
                 <?php endif ?>
                 <!-- ソートが期限日の時 -->
                 <?php if($sort === 'due_date'): ?>
                   <th scope="col">
-                    <a href="index.php?sort=created">追加日<i class="fas fa-sort"></i></a>
+                    <a href="index.php?sort=created">追加日&nbsp;<i class="fas fa-sort fa-xs"></i></a>
                   </th>
                   <?php if($order === 'asc'):?>
                     <th scope="col">
-                      <a href="index.php?sort=due_date&order=desc">期限日<i class="fas fa-sort-up"></i></a>
+                      <a href="index.php?sort=due_date&order=desc">期限日&nbsp;<i class="fas fa-sort-up fa-xs"></i></a>
                     </th>
                   <?php else: ?>
                     <th scope="col">
-                      <a href="index.php?sort=due_date&order=asc">期限日<i class="fas fa-sort-down"></i></a>
+                      <a href="index.php?sort=due_date&order=asc">期限日&nbsp;<i class="fas fa-sort-down fa-xs"></i></a>
                     </th>
                   <?php endif ?>
                 <?php endif ?>
