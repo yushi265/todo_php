@@ -38,7 +38,7 @@ session_destroy();
       <form action="login.php" method="post">
         <!-- エラー表示 -->
         <?php if(isset($err['mdg'])): ?>
-          <?php echo $err['msg'] ?>
+          <?php echo h($err['msg']) ?>
         <?php endif ?>
         <?php if(isset($login_err)): ?>
           <?php echo h($login_err) ?>
@@ -50,14 +50,14 @@ session_destroy();
           <label>メールアドレス：</label>
           <input type="email" name="email">
           <?php if(isset($err['email'])): ?>
-            <?php echo $err['email'] ?>
+            <?php echo h($err['email']) ?>
           <?php endif ?>
         </p>
         <p>
           <label>パスワード：</label>
           <input type="password" name="password">
           <?php if(isset($err['password'])): ?>
-            <?php echo $err['password'] ?>
+            <?php echo h($err['password']) ?>
           <?php endif ?>
         </p>
         <p>

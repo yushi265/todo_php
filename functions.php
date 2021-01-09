@@ -30,4 +30,12 @@ function setToken() {
   return $csrf_token;
 }
 
+/**
+ * index.phpへヘッダー
+ */
+function toIndex() {
+  header('Location: index.php');
+  return;
+}
+
 ?>

@@ -42,7 +42,7 @@ if(!$result) {
     <div class="alert alert-primary" role="alert">
       <?php if(count($err) > 0): ?>
         <?php foreach($err as $e): ?>
-          <p><?php echo $e ?></p>
+          <p><?php echo h($e) ?></p>
         <?php endforeach ?>
       <?php else: ?>
         <p>ログインしました</p>

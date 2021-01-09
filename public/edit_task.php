@@ -37,7 +37,7 @@ $tasks = TaskLogic::getUserTaskAll($user_id);
         <p>
           <select name="task_id">
             <?php foreach ($tasks as $task): ?>
-              <option value="<?php  echo $task['id'] ?>"><?php echo $task['task'] ?></option>
+              <option value="<?php  echo h($task['id']) ?>"><?php echo h($task['task']) ?></option>
             <?php endforeach ?>
           </select>
         </p>

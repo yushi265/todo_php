@@ -14,11 +14,16 @@ if(!$result) {
   return;
 }
 
+//変数定義
+$user_id = $_SESSION['login_user']['id'];
+$limit = TaskLogic::getLimit();
+$max_page = TaskLogic::getMaxPage($user_id);
+$max_task = TaskLogic::countUserTask($user_id);
+
 // URLバリデーション
 if(isset($_GET['sort'])) {
   if($_GET['sort'] !== "created" && $_GET['sort'] !== "due_date") {
-    header('Location: index.php');
-    return;
+    toIndex();
   } else {
     $sort = $_GET['sort'];
   }
@@ -28,8 +33,7 @@ if(isset($_GET['sort'])) {
 
 if(isset($_GET['order'])) {
   if($_GET['order'] !== "asc" && $_GET['order'] !== "desc") {
-    header('Location: index.php');
-    return;
+    toIndex();
   } else {
     $order = $_GET['order'];
   }
@@ -37,18 +41,17 @@ if(isset($_GET['order'])) {
   $order = "asc";
 }
 
-$user_id = $_SESSION['login_user']['id'];
-$limit = TaskLogic::getLimit();
-$max_page = TaskLogic::getMaxPage($user_id);
-$max_task = TaskLogic::countUserTask($user_id);
-
 if(isset($_GET['page'])) {
-  $page = $_GET['page'];
+  if($_GET['page'] <= $max_page) {
+    $page = $_GET['page'];
+  } else {
+    toIndex();
+  }
 } else {
-  $page = 1;
+  $page = '1';
 }
 
-// ユーザー全タスク取得
+// URLパラメータをもとにタスクを取得
 $tasklist = TaskLogic::getUserTask($user_id, $sort, $order, $page);
 
 if(!isset($tasklist)) {
@@ -79,7 +82,7 @@ if(!isset($tasklist)) {
 
     <!-- タイトル -->
     <h3>タスク管理</h3>
-    <p>現在時刻：<?php echo getNow()?></p>
+    <p>現在時刻：<?php echo h(getNow())?></p>
 
     <!-- タスク追加 -->
     <div class="alert alert-primary" role="alert">
@@ -89,12 +92,12 @@ if(!isset($tasklist)) {
         <select name="due_date">
           <option value="9999/12/31">-</option>
           <?php for($i = 0; $i < 10; $i++): ?>
-            <option value="<?php echo date('Y/n/j', strtotime('+'.$i.'day')); ?>">
-              <?php echo date('n/j', strtotime('+'.$i.'day')); ?>
+            <option value="<?php echo h(date('Y/n/j', strtotime('+'.$i.'day'))); ?>">
+              <?php echo h(date('n/j', strtotime('+'.$i.'day'))); ?>
             </option>
           <?php endfor ?>
         </select>
-        <input type="hidden" name="user_id" value="<?php echo $user_id ?>">
+        <input type="hidden" name="user_id" value="<?php echo h($user_id) ?>">
         <button type="submit" class="btn btn-primary">登録
         </button>
       </form>
@@ -109,7 +112,7 @@ if(!isset($tasklist)) {
           <table class="table table-striped">
             <thead>
               <tr>
-                <th scope="col">タスク&nbsp;(<?php echo $max_task ?>)</th>
+                <th scope="col">タスク&nbsp;(<?php echo h($max_task) ?>)</th>
                 <!-- ソートが追加日の時 -->
                 <?php if($sort === 'created'): ?>
                   <?php if($order === 'asc'):?>
@@ -147,7 +150,7 @@ if(!isset($tasklist)) {
               <?php foreach ($tasklist as $task): ?>
                 <tr>
                   <!-- タスク -->
-                  <td><?php echo $task['task'] ?></td>
+                  <td><?php echo h($task['task']) ?></td>
                   <!-- 登録時間 -->
                   <td><?php echo h(str_replace("-", "/", substr($task['created'],5,11))); ?></td>
                   <!-- 期限日 -->
@@ -170,23 +173,23 @@ if(!isset($tasklist)) {
           <?php if($page == 1): ?>
             　<i class="fas fa-angle-double-left fa-xs"></i>　
           <?php else: ?>
-            　<a href="index.php?sort=<?php echo $sort ?>&order=<?php echo $order ?>&page=<?php echo $page - 1 ?>"><i class="fas fa-angle-double-left fa-xs"></i></a>　
+            　<a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($page - 1) ?>"><i class="fas fa-angle-double-left fa-xs"></i></a>　
           <?php endif ?>
         </label>
 
         <?php for($i = 1; $i <= $max_page; $i++): ?>
           <?php if($page == $i): ?>
-            <?php echo $i."　" ?>
+            <?php echo h($i."　") ?>
             <?php continue; ?>
           <?php endif ?>
-          <a href="index.php?sort=<?php echo $sort ?>&order=<?php echo $order ?>&page=<?php echo $i ?>"><?php echo $i ?></a>　
+          <a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($i) ?>"><?php echo h($i) ?></a>　
         <?php endfor ?>
 
         <label>
           <?php if($page == 3): ?>
             <i class="fas fa-angle-double-right fa-xs"></i>
           <?php else: ?>
-            <a href="index.php?sort=<?php echo $sort ?>&order=<?php echo $order ?>&page=<?php echo $page + 1 ?>"><i class="fas fa-angle-double-right fa-xs"></i></a>　
+            <a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($page + 1) ?>"><i class="fas fa-angle-double-right fa-xs"></i></a>　
           <?php endif ?>
         </label>
       </div>
