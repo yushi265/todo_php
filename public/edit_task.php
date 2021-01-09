@@ -31,7 +31,7 @@ $tasks = TaskLogic::getUserTaskAll($user_id);
 <body>
   <div class="container">
     <h3>タスク編集</h3>
-    <div class="alert alert-primary" role="alert">
+    <div class="page_content">
       <form action="comp_edit.php" method="post">
         <p>どのタスクを編集しますか？</p>
         <p>

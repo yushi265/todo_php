@@ -53,31 +53,34 @@ if ($result) {
     <div id="formWrapper">
 
       <div id="form">
-          <p>ユーザー登録</p>
-        <div class="form-item">
-          <p class="formLabel">ニックネーム
-          </p>
-          <input type="text" name="name" id="name" class="form-style" autocomplete="off" required />
-        </div>
-        <div class="form-item">
-          <p class="formLabel">メールアドレス</p>
-          <input type="email" name="email" id="email" class="form-style" autocomplete="off" required />
-        </div>
-        <div class="form-item">
-          <p class="formLabel">パスワード</p>
-          <input type="password" name="password" id="password" class="form-style" required />
-          <div class="pw-view"><i class="fa fa-eye"></i></div>
-        </div>
-        <div class="form-item">
-          <p class="formLabel">パスワード確認</p>
-          <input type="password" name="password_conf" id="password_conf" class="form-style" autocomplete="off" required />
-        </div>
-        <div class="form-item">
-          <input type="submit" class="login pull-right" value="新規登録">
-          <a href="login_form.php">←戻る</a>
-          <div class="clear-fix"></div>
-        </div>
+        <p>　ユーザー登録</p>
+        <form action="register.php" method="post">
+          <div class="form-item">
+            <p class="formLabel">ユーザー名</p>
+            <input type="text" name="name" id="name" class="form-style" autocomplete="off" required />
+          </div>
+          <div class="form-item">
+            <p class="formLabel">メールアドレス</p>
+            <input type="email" name="email" id="email" class="form-style" autocomplete="off" required />
+          </div>
+          <div class="form-item">
+            <p class="formLabel">パスワード</p>
+            <input type="password" name="password" id="password" class="form-style" required />
+            <div class="pw-view"><i class="fa fa-eye"></i></div>
+          </div>
+          <div class="form-item">
+            <p class="formLabel">パスワード確認</p>
+            <input type="password" name="password_conf" id="password_conf" class="form-style" autocomplete="off" required />
+          </div>
+          <input type="hidden" name="csrf_token" value="<?php echo h(setToken()) ?>">
+          <div class="form-item">
+            <input type="submit" class="login pull-right" value="新規登録">
+            <a class="form_btn" href="login_form.php">←戻る</a>
+            <div class="clear-fix"></div>
+          </div>
+        </form>
       </div>
+
     </div>
   </body>
 

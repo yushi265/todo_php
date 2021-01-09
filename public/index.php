@@ -73,10 +73,12 @@ if (!isset($tasklist)) {
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="components.css">
+
+
 </head>
 
 <body>
-  <div class="container">
+  <div class="container index">
 
     <!-- ユーザー情報 -->
     <p>
@@ -89,34 +91,42 @@ if (!isset($tasklist)) {
     <p>現在時刻：<?php echo h(getNow()) ?></p>
 
     <!-- タスク追加 -->
-    <div class="add_task">
-        <form action="addtask.php" method="post">
-          <input type="text" name="task" value="" placeholder="新しいタスク" class="input_task">
-          　　　期限日
-          <select name="due_date">
-            <option value="9999/12/31">-</option>
-            <?php for ($i = 0; $i < 14; $i++) : ?>
-              <option value="<?php echo h(date('Y/n/j', strtotime('+' . $i . 'day'))); ?>">
-                <?php echo h(date('n/j', strtotime('+' . $i . 'day'))); ?>
-              </option>
-            <?php endfor ?>
-          </select>
-          <input type="hidden" name="user_id" value="<?php echo h($user_id) ?>">
-          <button type="submit" class="btn btn-primary">登録
-          </button>
-        </form>
+    <div class="page_content">
+      <form action="addtask.php" method="post">
+        <input type="text" name="task" value="" placeholder="新しいタスク" class="input_task">
+        　　　期限日
+        <select name="due_date">
+          <option value="9999/12/31">-</option>
+          <?php for ($i = 0; $i < 14; $i++) : ?>
+            <option value="<?php echo h(date('Y/n/j', strtotime('+' . $i . 'day'))); ?>">
+              <?php echo h(date('n/j', strtotime('+' . $i . 'day'))); ?>
+            </option>
+          <?php endfor ?>
+        </select>
+        <input type="hidden" name="user_id" value="<?php echo h($user_id) ?>">
+        <button type="submit" class="btn">追加
+        </button>
+      </form>
     </div>
 
     <!-- 全タスク表示 -->
-    <div class="add_task">
+    <div class="page_content">
       <?php if ($tasklist === array()) : ?>
         <p>タスクが登録されていません</p>
       <?php else : ?>
         <div class="task_list">
-          <table class="table table-striped">
+          <table class="table table-hover">
             <thead>
               <tr>
-                <th scope="col">タスク&nbsp;(<?php echo h($max_task) ?>)</th>
+                <th scope="col">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="">
+                    <label class="form-check-label" for="defaultCheck1">
+                    </label>
+                    タスク&nbsp;(<?php echo h($max_task) ?>)
+                  </div>
+
+                </th>
                 <!-- ソートが追加日の時 -->
                 <?php if ($sort === 'created') : ?>
                   <?php if ($order === 'asc') : ?>
@@ -154,7 +164,14 @@ if (!isset($tasklist)) {
               <?php foreach ($tasklist as $task) : ?>
                 <tr>
                   <!-- タスク -->
-                  <td><?php echo h($task['task']) ?></td>
+                  <td>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="">
+                      <label class="form-check-label" for="defaultCheck1">
+                      </label>
+                      <?php echo h($task['task']) ?>
+                    </div>
+                  </td>
                   <!-- 登録時間 -->
                   <td><?php echo h(str_replace("-", "/", substr($task['created'], 5, 11))); ?></td>
                   <!-- 期限日 -->
@@ -202,19 +219,18 @@ if (!isset($tasklist)) {
     <!-- ログアウト -->
     <div class="btn_group">
       <a href="edit_task.php">
-        <button type="buttom" class="btn btn-primary">編集</button>
+        <button type="button" class="btn">編集</button>
       </a>
       <a href="delete_task.php">
-        <button type="buttom" class="btn btn-primary">削除</button>
+        <button type="button" class="btn">削除</button>
       </a>
       <form action="logout.php" method="post" class="logout_btn">
         <input type="hidden" name="logout">
-        <button type="submit" name="logout" value="ログアウト" class="btn btn-primary">ログアウト
+        <button type="submit" name="logout" value="ログアウト" class="btn">ログアウト
         </button>
       </form>
     </div>
   </div>
-
 </body>
 
 </html>

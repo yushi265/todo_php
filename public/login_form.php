@@ -29,6 +29,7 @@ session_destroy();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
   <title>ログイン</title>
 </head>
@@ -61,7 +62,7 @@ session_destroy();
     <div id="formWrapper">
       <div id="form">
         <div class="form-item">
-          <p>ログイン</p>
+          <!-- <p>ログイン</p> -->
           <?php if (isset($err['msg'])) : ?>
             <p><?php echo h($err['msg']) ?></p>
           <?php endif ?>
@@ -72,7 +73,7 @@ session_destroy();
         <form action="login.php" method="post">
           <div class="form-item">
             <p class="formLabel">メールアドレス</p>
-            <input type="email" name="email" id="email" class="form-style" autocomplete="off" required />
+            <input type="email" name="email" id="email" class="form-style" autocomplete="on" required />
             <?php if (isset($err['email'])) : ?>
               <p><?php echo h($err['email']) ?></p>
             <?php endif ?>
@@ -83,11 +84,11 @@ session_destroy();
             <?php if (isset($err['password'])) : ?>
               <p><?php echo h($err['password']) ?></p>
             <?php endif ?>
-            <div class="pw-view"><i class="fa fa-eye"></i></div>
+            <!-- <div class="pw-view"><i class="fa fa-eye"></i></div> -->
           </div>
           <div class="form-item">
             <input type="submit" class="login pull-right" value="ログイン">
-            <a href="signup_form.php">新規登録</a>
+            <a class="form_btn" href="signup_form.php">新規登録</a>
             <div class="clear-fix">
             </div>
           </div>

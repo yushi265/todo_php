@@ -32,7 +32,7 @@ $tasks = TaskLogic::getUserTaskAll($user_id);
 <body>
   <div class="container">
     <h3>タスク削除</h3>
-    <div class="alert alert-primary" role="alert">
+    <div class="page_content">
       <form action="comp_delete.php" method="post">
         <p>どのタスクを削除しますか？</p>
         <p>
