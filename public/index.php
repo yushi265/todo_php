@@ -94,8 +94,9 @@ if (!isset($tasklist)) {
     <!-- タスク追加 -->
     <div class="page_content">
       <form action="addtask.php" method="post">
+        <!-- <div class="add_input"> -->
         <input type="text" name="task" value="" placeholder="新しいタスク" class="input_task">
-        　　　期限日
+        期限
         <select name="due_date">
           <option value="9999/12/31">-</option>
           <?php for ($i = 0; $i < 14; $i++) : ?>
@@ -105,8 +106,10 @@ if (!isset($tasklist)) {
           <?php endfor ?>
         </select>
         <input type="hidden" name="user_id" value="<?php echo h($user_id) ?>">
-        <button type="submit" class="btn">追加
-        </button>
+        <!-- </div> -->
+        <!-- <div class="add_btn"> -->
+        <button type="submit" class="btn add_btn">追加</button>
+        <!-- </div> -->
       </form>
     </div>
 
@@ -121,21 +124,21 @@ if (!isset($tasklist)) {
               <tr>
                 <th scope="col">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="">
-                    <label class="form-check-label" for="defaultCheck1">
+                    <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                    <label class="form-check-label" for="checkAll">
+                      タスク&nbsp;(<?php echo h($max_task) ?>)
                     </label>
-                    タスク&nbsp;(<?php echo h($max_task) ?>)
                   </div>
 
                 </th>
                 <!-- ソートが追加日の時 -->
                 <?php if ($sort === 'created') : ?>
                   <?php if ($order === 'asc') : ?>
-                    <th scope="col">
+                    <th scope="col" class="created">
                       <a href="index.php?sort=created&order=desc">追加日&nbsp;<i class="fas fa-sort-up fa-xs"></i></a>
                     </th>
                   <?php else : ?>
-                    <th scope="col">
+                    <th scope="col" class="created">
                       <a href="index.php?sort=created&order=asc">追加日&nbsp;<i class="fas fa-sort-down fa-xs"></i></a>
                     </th>
                   <?php endif ?>
@@ -145,7 +148,7 @@ if (!isset($tasklist)) {
                 <?php endif ?>
                 <!-- ソートが期限日の時 -->
                 <?php if ($sort === 'due_date') : ?>
-                  <th scope="col">
+                  <th scope="col" class="created">
                     <a href="index.php?sort=created">追加日&nbsp;<i class="fas fa-sort fa-xs"></i></a>
                   </th>
                   <?php if ($order === 'asc') : ?>
@@ -167,14 +170,14 @@ if (!isset($tasklist)) {
                   <!-- タスク -->
                   <td>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="">
-                      <label class="form-check-label" for="defaultCheck1">
+                      <input class="form-check-input" type="checkbox" value="" id="task<?php echo $task['id'] ?>">
+                      <label class="form-check-label" for="task<?php echo $task['id'] ?>">
+                        <?php echo h($task['task']) ?>
                       </label>
-                      <?php echo h($task['task']) ?>
                     </div>
                   </td>
                   <!-- 登録時間 -->
-                  <td><?php echo h(str_replace("-", "/", substr($task['created'], 5, 11))); ?></td>
+                  <td class="created"><?php echo h(str_replace("-", "/", substr($task['created'], 5, 11))); ?></td>
                   <!-- 期限日 -->
                   <td>
                     <?php if ($task['due_date'] === '9999-12-31') : ?>
@@ -232,6 +235,117 @@ if (!isset($tasklist)) {
       </form>
     </div>
   </div>
+
+  <script>
+    /*
+     * Material Deesign Checkboxes non Polymer.
+     * Tested and working in: IE9+, Chrome (Mobile + Desktop), Safari,
+     * Opera, Firefox.
+     * @author Jason Mayes 2014, www.jasonmayes.com
+     */
+
+    var wskCheckbox = function() {
+      var wskCheckboxes = [];
+      var SPACE_KEY = 32;
+
+      function animateCircle(checkboxElement) {
+        var circle =
+          checkboxElement.parentNode.getElementsByClassName('wskCircle')[0];
+        var restore = '';
+        if (circle.className.indexOf('flipColor') < 0) {
+          restore = circle.className + ' flipColor';
+        } else {
+          restore = 'wskCircle';
+        }
+        circle.className = restore + ' show';
+        setTimeout(function() {
+          circle.className = restore;
+        }, 150);
+      }
+
+      function addEventHandler(elem, eventType, handler) {
+        if (elem.addEventListener) {
+          elem.addEventListener(eventType, handler, false);
+        } else if (elem.attachEvent) {
+          elem.attachEvent('on' + eventType, handler);
+        }
+      }
+
+      function clickHandler(e) {
+        e.stopPropagation();
+        if (this.className.indexOf('checked') < 0) {
+          this.className += ' checked';
+        } else {
+          this.className = 'wskCheckbox';
+        }
+        animateCircle(this);
+      }
+
+      function keyHandler(e) {
+        e.stopPropagation();
+        if (e.keyCode === SPACE_KEY) {
+          clickHandler.call(this, e);
+          // Also update the checkbox state.
+          var cbox = document.getElementById(this.parentNode.getAttribute('for'));
+          cbox.checked = !cbox.checked;
+        }
+      }
+
+      function clickHandlerLabel(e) {
+        var id = this.getAttribute('for');
+        var i = wskCheckboxes.length;
+        while (i--) {
+          if (wskCheckboxes[i].id === id) {
+            if (wskCheckboxes[i].checkbox.className.indexOf('checked') < 0) {
+              wskCheckboxes[i].checkbox.className += ' checked';
+            } else {
+              wskCheckboxes[i].checkbox.className = 'wskCheckbox';
+            }
+            animateCircle(wskCheckboxes[i].checkbox);
+            break;
+          }
+        }
+      }
+
+      function findCheckBoxes() {
+        var labels = document.getElementsByTagName('label');
+        var i = labels.length;
+        while (i--) {
+          var posCheckbox = document.getElementById(labels[i].getAttribute('for'));
+          if (posCheckbox !== null && posCheckbox.type === 'checkbox' &&
+            (posCheckbox.className.indexOf('wskCheckbox') >= 0)) {
+            var text = labels[i].innerText;
+            var span = document.createElement('span');
+            span.className = 'wskCheckbox';
+            span.tabIndex = i;
+            var span2 = document.createElement('span');
+            span2.className = 'wskCircle flipColor';
+            labels[i].insertBefore(span2, labels[i].firstChild);
+            labels[i].insertBefore(span, labels[i].firstChild);
+            addEventHandler(span, 'click', clickHandler);
+            addEventHandler(span, 'keyup', keyHandler);
+            addEventHandler(labels[i], 'click', clickHandlerLabel);
+            var cbox = document.getElementById(labels[i].getAttribute('for'));
+            if (cbox.getAttribute('checked') !== null) {
+              span.click();
+            }
+
+            wskCheckboxes.push({
+              'checkbox': span,
+              'id': labels[i].getAttribute('for')
+            });
+          }
+        }
+      }
+
+      return {
+        init: findCheckBoxes
+      };
+    }();
+
+    wskCheckbox.init();
+  </script>
+
 </body>
 
 </html>

@@ -1,20 +1,27 @@
+body {
+  background-color: rgba(0,0,0,.2);
+}
 .container {
   padding-top: 20px;
   width: 700px;
 }
-.index {
-  /* background-color: #eee; */
-}
+
+/* タスク追加 */
 .page_content {
   border: 1px solid lightgray;
   padding: 20px;
   border-radius: 5px;
   margin-bottom: 20px;
-  background-color: #F2F2F2;
+  background-color: white;
 }
 .input_task {
   width: 350px;
 }
+.add_btn {
+  margin-left: 50px;
+}
+
+/* タスクリスト */
 .task_list{
   background-color: white;
 }
@@ -50,22 +57,23 @@
   display: inline-block;
 }
 
-/* @media screen and (max-width:380px) {
-    .header {
-        width: 350px;
+/* レスポンシブ */
+@media screen and (max-width:380px) {
+    .container {
+      width: 370px;
     }
-} */
+    .input_task {
+      width: 135px;
+    }
+    .add_btn {
+      margin-left: 0;
+    }
+    .created {
+      display: none;
+    }
+}
 
-
-/* body{
-   background: url(http://www.timurtek.com/wp-content/uploads/2014/10/form-bg.jpg) no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  font-family:'HelveticaNeue','Arial', sans-serif;
-
-} */
+/* フォーム */
 .form_btn{color:#58bff6;text-decoration: none;}
 a:hover{color:#aaa; }
 .pull-right{float: right;}
@@ -164,4 +172,44 @@ input[type="submit"].login:focus{outline: none;}
   border:none;
   color: #fff;
   font-weight: bold;
+}
+
+/*チェックボックス*/
+input[type="checkbox"] { display: none; }
+
+input[type="checkbox"] + label {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+input[type="checkbox"] + label:last-child { margin-bottom: 0; }
+
+input[type="checkbox"] + label:before {
+  content: '';
+  display: block;
+  width: 15px;
+  height: 15px;
+  border: 1px solid ;
+  position: absolute;
+  left: 0;
+  top: 10px;
+  -webkit-transition: all .12s, border-color .08s;
+  transition: all .12s, border-color .08s;
+}
+
+input[type="checkbox"]:checked + label:before {
+  width: 10px;
+  top: -3px;
+  left: 5px;
+  border-radius: 0;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
