@@ -134,11 +134,11 @@ if (!isset($tasklist)) {
                 <!-- ソートが追加日の時 -->
                 <?php if ($sort === 'created') : ?>
                   <?php if ($order === 'asc') : ?>
-                    <th scope="col" class="created">
+                    <th scope="col">
                       <a href="index.php?sort=created&order=desc">追加日&nbsp;<i class="fas fa-sort-up fa-xs"></i></a>
                     </th>
                   <?php else : ?>
-                    <th scope="col" class="created">
+                    <th scope="col">
                       <a href="index.php?sort=created&order=asc">追加日&nbsp;<i class="fas fa-sort-down fa-xs"></i></a>
                     </th>
                   <?php endif ?>
@@ -148,7 +148,7 @@ if (!isset($tasklist)) {
                 <?php endif ?>
                 <!-- ソートが期限日の時 -->
                 <?php if ($sort === 'due_date') : ?>
-                  <th scope="col" class="created">
+                  <th scope="col">
                     <a href="index.php?sort=created">追加日&nbsp;<i class="fas fa-sort fa-xs"></i></a>
                   </th>
                   <?php if ($order === 'asc') : ?>
@@ -193,158 +193,47 @@ if (!isset($tasklist)) {
         </div>
       <?php endif ?>
 
-      <div class="page">
-        <label>
+      <!-- ページャー -->
+      <nav class="cp_navi">
+        <div class="cp_pagination">
           <?php if ($page == 1) : ?>
-            　<i class="fas fa-angle-double-left fa-xs"></i>　
+            <p class="cp_pagenum prev disabled">prev</p>
           <?php else : ?>
-            　<a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($page - 1) ?>"><i class="fas fa-angle-double-left fa-xs"></i></a>　
+            <a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($page - 1) ?>" class="cp_pagenum prev">prev</a>
           <?php endif ?>
-        </label>
 
-        <?php for ($i = 1; $i <= $max_page; $i++) : ?>
-          <?php if ($page == $i) : ?>
-            <?php echo h($i . "　") ?>
-            <?php continue; ?>
-          <?php endif ?>
-          <a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($i) ?>"><?php echo h($i) ?></a>　
-        <?php endfor ?>
+          <?php for ($i = 1; $i <= $max_page; $i++) : ?>
+            <?php if ($page == $i) : ?>
+              <span aria-current="page" class="cp_pagenum current"><?php echo h($i) ?></span>
+              <?php continue; ?>
+            <?php endif ?>
+            <a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($i) ?>" class="cp_pagenum"><?php echo h($i) ?></a>
+          <?php endfor ?>
 
-        <label>
-          <?php if ($page == 3) : ?>
-            <i class="fas fa-angle-double-right fa-xs"></i>
-          <?php else : ?>
-            <a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($page + 1) ?>"><i class="fas fa-angle-double-right fa-xs"></i></a>　
+          <?php if ($page == $max_page) : ?>
+            <p class="cp_pagenum prev disabled">next</p>
+          <?php else: ?>
+            <a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($page + 1) ?>" class="cp_pagenum next">next</a>
           <?php endif ?>
-        </label>
+        </div>
+      </nav>
+
+      <!-- ログアウト -->
+      <div class="btn_group">
+        <a href="edit_task.php">
+          <button type="button" class="btn">編集</button>
+        </a>
+        <a href="delete_task.php">
+          <button type="button" class="btn">削除</button>
+        </a>
+        <form action="logout.php" method="post" class="logout_btn">
+          <input type="hidden" name="logout">
+          <button type="submit" name="logout" value="ログアウト" class="btn">ログアウト
+          </button>
+        </form>
       </div>
     </div>
-
-    <!-- ログアウト -->
-    <div class="btn_group">
-      <a href="edit_task.php">
-        <button type="button" class="btn">編集</button>
-      </a>
-      <a href="delete_task.php">
-        <button type="button" class="btn">削除</button>
-      </a>
-      <form action="logout.php" method="post" class="logout_btn">
-        <input type="hidden" name="logout">
-        <button type="submit" name="logout" value="ログアウト" class="btn">ログアウト
-        </button>
-      </form>
-    </div>
   </div>
-
-  <script>
-    /*
-     * Material Deesign Checkboxes non Polymer.
-     * Tested and working in: IE9+, Chrome (Mobile + Desktop), Safari,
-     * Opera, Firefox.
-     * @author Jason Mayes 2014, www.jasonmayes.com
-     */
-
-    var wskCheckbox = function() {
-      var wskCheckboxes = [];
-      var SPACE_KEY = 32;
-
-      function animateCircle(checkboxElement) {
-        var circle =
-          checkboxElement.parentNode.getElementsByClassName('wskCircle')[0];
-        var restore = '';
-        if (circle.className.indexOf('flipColor') < 0) {
-          restore = circle.className + ' flipColor';
-        } else {
-          restore = 'wskCircle';
-        }
-        circle.className = restore + ' show';
-        setTimeout(function() {
-          circle.className = restore;
-        }, 150);
-      }
-
-      function addEventHandler(elem, eventType, handler) {
-        if (elem.addEventListener) {
-          elem.addEventListener(eventType, handler, false);
-        } else if (elem.attachEvent) {
-          elem.attachEvent('on' + eventType, handler);
-        }
-      }
-
-      function clickHandler(e) {
-        e.stopPropagation();
-        if (this.className.indexOf('checked') < 0) {
-          this.className += ' checked';
-        } else {
-          this.className = 'wskCheckbox';
-        }
-        animateCircle(this);
-      }
-
-      function keyHandler(e) {
-        e.stopPropagation();
-        if (e.keyCode === SPACE_KEY) {
-          clickHandler.call(this, e);
-          // Also update the checkbox state.
-          var cbox = document.getElementById(this.parentNode.getAttribute('for'));
-          cbox.checked = !cbox.checked;
-        }
-      }
-
-      function clickHandlerLabel(e) {
-        var id = this.getAttribute('for');
-        var i = wskCheckboxes.length;
-        while (i--) {
-          if (wskCheckboxes[i].id === id) {
-            if (wskCheckboxes[i].checkbox.className.indexOf('checked') < 0) {
-              wskCheckboxes[i].checkbox.className += ' checked';
-            } else {
-              wskCheckboxes[i].checkbox.className = 'wskCheckbox';
-            }
-            animateCircle(wskCheckboxes[i].checkbox);
-            break;
-          }
-        }
-      }
-
-      function findCheckBoxes() {
-        var labels = document.getElementsByTagName('label');
-        var i = labels.length;
-        while (i--) {
-          var posCheckbox = document.getElementById(labels[i].getAttribute('for'));
-          if (posCheckbox !== null && posCheckbox.type === 'checkbox' &&
-            (posCheckbox.className.indexOf('wskCheckbox') >= 0)) {
-            var text = labels[i].innerText;
-            var span = document.createElement('span');
-            span.className = 'wskCheckbox';
-            span.tabIndex = i;
-            var span2 = document.createElement('span');
-            span2.className = 'wskCircle flipColor';
-            labels[i].insertBefore(span2, labels[i].firstChild);
-            labels[i].insertBefore(span, labels[i].firstChild);
-            addEventHandler(span, 'click', clickHandler);
-            addEventHandler(span, 'keyup', keyHandler);
-            addEventHandler(labels[i], 'click', clickHandlerLabel);
-            var cbox = document.getElementById(labels[i].getAttribute('for'));
-            if (cbox.getAttribute('checked') !== null) {
-              span.click();
-            }
-
-            wskCheckboxes.push({
-              'checkbox': span,
-              'id': labels[i].getAttribute('for')
-            });
-          }
-        }
-      }
-
-      return {
-        init: findCheckBoxes
-      };
-    }();
-
-    wskCheckbox.init();
-  </script>
 
 </body>
 

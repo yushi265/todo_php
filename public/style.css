@@ -25,8 +25,8 @@ body {
 .task_list{
   background-color: white;
 }
-.page {
-  text-align: center;
+.task_list a {
+  color: black;
 }
 .btn {
   background-color: #58bff6;
@@ -213,3 +213,45 @@ input[type="checkbox"]:checked + label:before {
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+
+/* ページャー */
+nav.cp_navi *, nav.cp_navi *:after, nav.cp_navi *:before {
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
+}
+nav.cp_navi a {
+	text-decoration: none;
+}
+nav.cp_navi {
+	margin-bottom: 2em;
+	text-align: center;
+}
+.cp_navi .cp_pagination {
+	display: inline-block;
+}
+.cp_navi .cp_pagenum {
+	font-size: 1em;
+	line-height: 30px;
+	display: block;
+	float: left;
+	transition: 400ms ease;
+	color: #37474F;
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+	margin: auto .5em;
+}
+.cp_navi .cp_pagenum:hover,
+.cp_navi .cp_pagenum.current {
+	font-weight: bold;
+	color: #ffffff;
+	background-color: #58bff6;
+	border-radius: 50%;
+}
+.cp_navi .cp_pagenum.prev:hover,
+.cp_navi .cp_pagenum.next:hover {
+	color: #58bff6;
+	background-color: transparent;
+	border-radius: 50%;
+}
+.disabled { pointer-events: none; }
