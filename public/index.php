@@ -161,6 +161,9 @@ if (!isset($tasklist)) {
                     </th>
                   <?php endif ?>
                 <?php endif ?>
+                <th>
+
+                </th>
               </tr>
             </thead>
 
@@ -170,8 +173,8 @@ if (!isset($tasklist)) {
                   <!-- タスク -->
                   <td>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="task<?php echo $task['id'] ?>">
-                      <label class="form-check-label" for="task<?php echo $task['id'] ?>">
+                      <input class="form-check-input" type="checkbox" name="selected_id[]" value="<?php echo h($task['id']) ?>" id="task<?php echo h($task['id']) ?>">
+                      <label class="form-check-label" for="task<?php echo h($task['id']) ?>">
                         <?php echo h($task['task']) ?>
                       </label>
                     </div>
@@ -186,6 +189,11 @@ if (!isset($tasklist)) {
                       <p><?php echo h(str_replace("-", "/", substr($task['due_date'], 5, 5))); ?></p>
                     <?php endif ?>
                   </td>
+                  <td>
+                    <a href="show.php?id=<?php echo h($task['id']) ?>">
+                      <button class="btn">詳細</button>
+                    </a>
+                  </td>
                 </tr>
               <?php endforeach ?>
             </tbody>
@@ -197,9 +205,11 @@ if (!isset($tasklist)) {
       <nav class="cp_navi">
         <div class="cp_pagination">
           <?php if ($page == 1) : ?>
-            <p class="cp_pagenum prev disabled">prev</p>
+            <p class="cp_pagenum prev disabled">&nbsp;<i class="fas fa-chevron-left fa-xs"></i>&nbsp;</p>
           <?php else : ?>
-            <a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($page - 1) ?>" class="cp_pagenum prev">prev</a>
+            <a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($page - 1) ?>" class="cp_pagenum prev">
+              &nbsp;<i class="fas fa-chevron-left fa-xs"></i>&nbsp;
+            </a>
           <?php endif ?>
 
           <?php for ($i = 1; $i <= $max_page; $i++) : ?>
@@ -211,25 +221,21 @@ if (!isset($tasklist)) {
           <?php endfor ?>
 
           <?php if ($page == $max_page) : ?>
-            <p class="cp_pagenum prev disabled">next</p>
-          <?php else: ?>
-            <a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($page + 1) ?>" class="cp_pagenum next">next</a>
+            <p class="cp_pagenum prev disabled">&nbsp;<i class="fas fa-chevron-right fa-xs"></i>&nbsp;</p>
+          <?php else : ?>
+            <a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($page + 1) ?>" class="cp_pagenum next">
+              &nbsp;<i class="fas fa-chevron-right fa-xs"></i>&nbsp;
+            </a>
           <?php endif ?>
         </div>
       </nav>
 
       <!-- ログアウト -->
       <div class="btn_group">
-        <a href="edit_task.php">
-          <button type="button" class="btn">編集</button>
-        </a>
-        <a href="delete_task.php">
-          <button type="button" class="btn">削除</button>
-        </a>
+        <a href="delete_task.php"><button type="button" class="btn">削除</button></a>
         <form action="logout.php" method="post" class="logout_btn">
           <input type="hidden" name="logout">
-          <button type="submit" name="logout" value="ログアウト" class="btn">ログアウト
-          </button>
+          <button type="submit" name="logout" value="ログアウト" class="btn">ログアウト</button>
         </form>
       </div>
     </div>

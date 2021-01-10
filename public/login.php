@@ -25,6 +25,8 @@ $result = UserLogic::login($email, $password);
 if(!$result) {
   header('Location: login_form.php');
   return;
+} else {
+  toIndex();
 }
 ?>
 

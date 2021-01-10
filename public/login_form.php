@@ -68,6 +68,8 @@ session_destroy();
           <?php endif ?>
           <?php if (isset($login_err)) : ?>
             <p><?php echo h($login_err) ?></p>
+          <?php else: ?>
+            <p>ログイン</p>
           <?php endif ?>
         </div>
         <form action="login.php" method="post">

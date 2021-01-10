@@ -24,7 +24,7 @@ if($taskCount > 20) {
 //エラーがなければタスクを登録
 if(count($err) === 0 && $taskCount <= 20) {
   $hasAdded = TaskLogic::addTask($_POST);
-  header('Location: index.php');
+  toIndex();
 
   if(!$hasAdded) {
     $err[] = '登録に失敗しました。';

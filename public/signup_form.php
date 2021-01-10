@@ -51,12 +51,13 @@ if ($result) {
 
   <body>
     <div id="formWrapper">
-
       <div id="form">
-        <p>　ユーザー登録</p>
+        <div class="form-item">
+        <p>ユーザー登録</p>
+        </div>
         <form action="register.php" method="post">
           <div class="form-item">
-            <p class="formLabel">ユーザー名</p>
+            <p class="formLabel">ニックネーム</p>
             <input type="text" name="name" id="name" class="form-style" autocomplete="off" required />
           </div>
           <div class="form-item">

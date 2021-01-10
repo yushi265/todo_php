@@ -9,7 +9,7 @@ $result = TaskLogic::deleteTask($id);
 if(!$result) {
   exit('削除できませんでした');
 } else {
-  header('Location: index.php');
+  toIndex();
 }
 
 ?>

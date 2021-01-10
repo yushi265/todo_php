@@ -48,7 +48,7 @@ class TaskLogic {
       $stmt->execute($arr);
       $tasklist = $stmt->fetchall();
       return $tasklist;
-    } catch(\Exeption $e) {
+    } catch(\Exception $e) {
       exit('表示できませんでした');
     }
   }
@@ -70,7 +70,7 @@ class TaskLogic {
       $stmt->execute($arr);
       $tasklist = $stmt->fetchall();
       return $tasklist;
-    } catch(\Exeption $e) {
+    } catch(\Exception $e) {
       exit('表示できませんでした');
     }
   }
@@ -105,18 +105,19 @@ class TaskLogic {
    * @param int $id
    * @return array $result
    */
-  public static function getTaskById($task_id) {
+  public static function getTaskById($id) {
+
     $sql = 'SELECT * FROM task WHERE id = ?';
 
     $arr = [];
-    $arr[] = $task_id;
+    $arr[] = $id;
 
     try {
       $stmt = connect()->prepare($sql);
       $stmt->execute($arr);
       $task = $stmt->fetch();
       return $task;
-    } catch(\Exeption $e) {
+    } catch(\Exception $e) {
       exit('表示できませんでした');
     }
   }
@@ -127,18 +128,20 @@ class TaskLogic {
    * @param string $edited_task
    * @return bool $result
    */
-  public static function editTask($id, $edited_task) {
-    $sql = 'UPDATE task SET task = ? WHERE id = ?';
+  public static function editTask($data) {
+    $sql = 'UPDATE task SET task = ?, due_date = ?, memo = ? WHERE id = ?';
 
     $arr = [];
-    $arr[] = $edited_task;
-    $arr[] = $id;
+    $arr[] = $data['task'];
+    $arr[] = $data['due_date'];
+    $arr[] = $data['memo'];
+    $arr[] = $data['id'];
 
     try {
       $stmt = connect()->prepare($sql);
       $result = $stmt->execute($arr);
       return $result;
-    } catch(\Exeption $e) {
+    } catch(\Exception $e) {
       exit('表示できませんでした');
     }
   }
@@ -158,7 +161,7 @@ class TaskLogic {
       $stmt = connect()->prepare($sql);
       $result = $stmt->execute($arr);
       return $result;
-    } catch(\Exeption $e) {
+    } catch(\Exception $e) {
       exit('表示できませんでした');
     }
   }
@@ -179,7 +182,7 @@ class TaskLogic {
       $stmt->execute($arr);
       $result = $stmt->fetchColumn();
       return $result;
-    } catch(\Exeption $e) {
+    } catch(\Exception $e) {
       exit('表示できませんでした');
     }
   }

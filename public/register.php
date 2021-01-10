@@ -56,7 +56,7 @@ if(count($err) === 0) {
     <?php else: ?>
       <h3>登録完了</h3>
     <?php endif ?>
-    <div class="alert alert-primary" role="alert">
+    <div class="page_content">
       <?php if(count($err) > 0): ?>
         <?php foreach($err as $e): ?>
           <p><?php echo h($e) ?></p>
