@@ -21,6 +21,7 @@ $max_page = TaskLogic::getMaxPage($user_id);
 $max_task = TaskLogic::countUserTask($user_id);
 
 // URLバリデーション
+// $sort
 if (isset($_GET['sort'])) {
   if ($_GET['sort'] !== "created" && $_GET['sort'] !== "due_date") {
     toIndex();
@@ -30,7 +31,7 @@ if (isset($_GET['sort'])) {
 } else {
   $sort = "created";
 }
-
+// $order
 if (isset($_GET['order'])) {
   if ($_GET['order'] !== "asc" && $_GET['order'] !== "desc") {
     toIndex();
@@ -40,7 +41,7 @@ if (isset($_GET['order'])) {
 } else {
   $order = "asc";
 }
-
+// $page
 if (isset($_GET['page'])) {
   if ($_GET['page'] <= $max_page) {
     $page = $_GET['page'];
@@ -63,7 +64,6 @@ if (!isset($tasklist)) {
 <!-- HTML -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
@@ -72,15 +72,13 @@ if (!isset($tasklist)) {
   <link rel="shortcut icon" href="../image/favicon.png" type="image/x-icon">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="components.css">
-
-
 </head>
 
 <body>
   <div class="container index">
-
     <!-- ユーザー情報 -->
     <p>
       <?php echo h($_SESSION['login_user']['name'] . "様"); ?>
@@ -89,12 +87,11 @@ if (!isset($tasklist)) {
 
     <!-- タイトル -->
     <h3>タスク管理</h3>
-    <p>現在時刻：<?php echo h(getNow()) ?></p>
+    <p>現在時刻：<span id="view_clock"></span></p>
 
     <!-- タスク追加 -->
     <div class="page_content">
-      <form action="addtask.php" method="post">
-        <!-- <div class="add_input"> -->
+      <form action="add_task.php" method="post">
         <input type="text" name="task" value="" placeholder="新しいタスク" class="input_task">
         期限
         <select name="due_date">
@@ -106,10 +103,7 @@ if (!isset($tasklist)) {
           <?php endfor ?>
         </select>
         <input type="hidden" name="user_id" value="<?php echo h($user_id) ?>">
-        <!-- </div> -->
-        <!-- <div class="add_btn"> -->
         <button type="submit" class="btn add_btn">追加</button>
-        <!-- </div> -->
       </form>
     </div>
 
@@ -129,40 +123,39 @@ if (!isset($tasklist)) {
                       タスク&nbsp;(<?php echo h($max_task) ?>)
                     </label>
                   </div>
-
                 </th>
                 <!-- ソートが追加日の時 -->
                 <?php if ($sort === 'created') : ?>
                   <?php if ($order === 'asc') : ?>
-                    <th scope="col">
+                    <th scope="col" class="created">
                       <a href="index.php?sort=created&order=desc">追加日&nbsp;<i class="fas fa-sort-up fa-xs"></i></a>
                     </th>
                   <?php else : ?>
-                    <th scope="col">
+                    <th scope="col" class="created">
                       <a href="index.php?sort=created&order=asc">追加日&nbsp;<i class="fas fa-sort-down fa-xs"></i></a>
                     </th>
                   <?php endif ?>
-                  <th scope="col">
+                  <th scope="col" class="due_date">
                     <a href="index.php?sort=due_date">期限日&nbsp;<i class="fas fa-sort fa-xs"></i></a>
                   </th>
                 <?php endif ?>
                 <!-- ソートが期限日の時 -->
                 <?php if ($sort === 'due_date') : ?>
-                  <th scope="col">
+                  <th scope="col" class="created">
                     <a href="index.php?sort=created">追加日&nbsp;<i class="fas fa-sort fa-xs"></i></a>
                   </th>
                   <?php if ($order === 'asc') : ?>
-                    <th scope="col">
+                    <th scope="col" class="due_date">
                       <a href="index.php?sort=due_date&order=desc">期限日&nbsp;<i class="fas fa-sort-up fa-xs"></i></a>
                     </th>
                   <?php else : ?>
-                    <th scope="col">
+                    <th scope="col" class="due_date">
                       <a href="index.php?sort=due_date&order=asc">期限日&nbsp;<i class="fas fa-sort-down fa-xs"></i></a>
                     </th>
                   <?php endif ?>
                 <?php endif ?>
+                <!-- 詳細ボタン -->
                 <th>
-
                 </th>
               </tr>
             </thead>
@@ -182,7 +175,7 @@ if (!isset($tasklist)) {
                   <!-- 登録時間 -->
                   <td class="created"><?php echo h(str_replace("-", "/", substr($task['created'], 5, 11))); ?></td>
                   <!-- 期限日 -->
-                  <td>
+                  <td class="due_date">
                     <?php if ($task['due_date'] === '9999-12-31') : ?>
                       <p>　-</p>
                     <?php else : ?>
@@ -204,6 +197,7 @@ if (!isset($tasklist)) {
       <!-- ページャー -->
       <nav class="cp_navi">
         <div class="cp_pagination">
+          <!-- 前へ -->
           <?php if ($page == 1) : ?>
             <p class="cp_pagenum prev disabled">&nbsp;<i class="fas fa-chevron-left fa-xs"></i>&nbsp;</p>
           <?php else : ?>
@@ -211,7 +205,7 @@ if (!isset($tasklist)) {
               &nbsp;<i class="fas fa-chevron-left fa-xs"></i>&nbsp;
             </a>
           <?php endif ?>
-
+          <!-- ページ番号 -->
           <?php for ($i = 1; $i <= $max_page; $i++) : ?>
             <?php if ($page == $i) : ?>
               <span aria-current="page" class="cp_pagenum current"><?php echo h($i) ?></span>
@@ -219,7 +213,7 @@ if (!isset($tasklist)) {
             <?php endif ?>
             <a href="index.php?sort=<?php echo h($sort) ?>&order=<?php echo h($order) ?>&page=<?php echo h($i) ?>" class="cp_pagenum"><?php echo h($i) ?></a>
           <?php endfor ?>
-
+          <!-- 次へ -->
           <?php if ($page == $max_page) : ?>
             <p class="cp_pagenum prev disabled">&nbsp;<i class="fas fa-chevron-right fa-xs"></i>&nbsp;</p>
           <?php else : ?>
@@ -241,6 +235,27 @@ if (!isset($tasklist)) {
     </div>
   </div>
 
-</body>
+  <!-- 現在時刻表示関数 -->
+  <script type="text/javascript">
+    timerID = setInterval('clock()', 500); //0.5秒毎にclock()を実行
 
+    function clock() {
+      document.getElementById("view_clock").innerHTML = getNow();
+    }
+
+    function getNow() {
+      var now = new Date();
+      var year = now.getFullYear();
+      var mon = now.getMonth() + 1; //１を足すこと
+      var day = now.getDate();
+      var hour = now.getHours();
+      var min = now.getMinutes();
+      var sec = now.getSeconds();
+
+      //出力用
+      var s = year + "/" + mon + "/" + day + " " + hour + ":" + min + ":" + sec;
+      return s;
+    }
+  </script>
+</body>
 </html>

@@ -73,6 +73,9 @@ body {
     .created {
       display: none;
     }
+    .due_date {
+      display: none;
+    }
 }
 
 /* フォーム */
