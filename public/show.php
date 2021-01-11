@@ -13,12 +13,19 @@ if (!$result) {
   return;
 }
 
-//ログインユーザーのタスクの情報を取得
+//IDからユーザーのタスク情報を取得
 $task_id = $_GET['id'];
 $task = TaskLogic::getTaskById($task_id);
 
+//取得できなかったらindex.phpにリダイレクト
+if(!$task) {
+  toIndex();
+  return;
+}
+
 ?>
 
+<!-- HTML -->
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -33,7 +40,7 @@ $task = TaskLogic::getTaskById($task_id);
 <body>
   <div class="container">
     <div class="page_content">
-      <form action="edit_task_test.php" method="post">
+      <form action="edit_task.php" method="post">
         <input type="hidden" name="id" value="<?php echo h($task['id']) ?>">
         <label>
           <input type="text" name="task" value="<?php echo h($task['task']) ?>">
@@ -57,6 +64,10 @@ $task = TaskLogic::getTaskById($task_id);
           <textarea name="memo" cols="30" rows="10"><?php echo $task['memo'] ?></textarea>
         </label>
         <br><button type="submit" class="btn">変更</button>
+      </form>
+      <form action="delete_task.php" method="post">
+        <input type="hidden" name="id" value="<?php echo h($task['id']) ?>">
+        <br><button type="submit" class="btn">削除</button><br>
       </form>
       <a href="index.php">←戻る</a>
     </div>
