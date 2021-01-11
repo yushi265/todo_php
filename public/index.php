@@ -80,17 +80,13 @@ if (!isset($tasklist)) {
 <body>
   <div class="container index">
     <!-- ユーザー情報 -->
-    <p>
-      <?php echo h($_SESSION['login_user']['name'] . "様"); ?>
-      <?php echo h("<" . $_SESSION['login_user']['email'] . ">"); ?>
-    </p>
-
-    <!-- タイトル -->
-    <h3>タスク管理</h3>
-    <p>現在時刻：<span id="view_clock"></span></p>
-
-    <!-- タスク追加 -->
     <div class="page_content">
+      <h5>
+        <?php echo h($_SESSION['login_user']['name'] . "様"); ?>
+        <?php //echo h("<" . $_SESSION['login_user']['email'] . ">"); ?>
+      </h5>
+      <p>現在時刻：<span id="view_clock"></span></p>
+      <!-- タスク追加 -->
       <form action="add_task.php" method="post">
         <input type="text" name="task" value="" placeholder="新しいタスク" class="input_task">
         期限
@@ -98,8 +94,8 @@ if (!isset($tasklist)) {
           <option value="9999/12/31">-</option>
           <?php for ($i = 0; $i < 14; $i++) : ?>
             <option value="<?php echo h(date('Y/n/j', strtotime('+' . $i . 'day'))); ?>">
-              <?php echo h(date('n/j', strtotime('+' . $i . 'day'))); ?>
-            </option>
+            <?php echo h(date('n/j', strtotime('+' . $i . 'day'))); ?>
+          </option>
           <?php endfor ?>
         </select>
         <input type="hidden" name="user_id" value="<?php echo h($user_id) ?>">
@@ -107,21 +103,21 @@ if (!isset($tasklist)) {
       </form>
     </div>
 
-    <!-- 全タスク表示 -->
-    <div class="page_content">
-      <?php if ($tasklist === array()) : ?>
-        <p>タスクが登録されていません</p>
-      <?php else : ?>
-        <div class="task_list">
-          <table class="table table-hover">
-            <thead>
-              <tr>
-                <th scope="col">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="checkAll">
-                    <label class="form-check-label" for="checkAll">
-                      タスク&nbsp;(<?php echo h($max_task) ?>)
-                    </label>
+      <!-- 全タスク表示 -->
+      <div class="page_content">
+        <?php if ($tasklist === array()) : ?>
+          <p>タスクが登録されていません</p>
+          <?php else : ?>
+            <div class="task_list">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                        <label class="form-check-label" for="checkAll">
+                          タスク&nbsp;(<?php echo h($max_task) ?>)
+                        </label>
                   </div>
                 </th>
                 <!-- ソートが追加日の時 -->
@@ -225,13 +221,10 @@ if (!isset($tasklist)) {
       </nav>
 
       <!-- ログアウト -->
-      <div class="btn_group">
-        <a href="delete_task.php"><button type="button" class="btn">削除</button></a>
         <form action="logout.php" method="post" class="logout_btn">
           <input type="hidden" name="logout">
-          <button type="submit" name="logout" value="ログアウト" class="btn">ログアウト</button>
-        </form>
-      </div>
+          <button class="btn" type="submit" name="logout" value="ログアウト" class="btn">ログアウト</button>
+          </form>
     </div>
   </div>
 

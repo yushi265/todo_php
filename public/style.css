@@ -30,10 +30,6 @@ body {
   color: black;
 }
 .btn {
-  background-color: #58bff6;
-  color: white;
-}
-.btn {
   -moz-border-radius: 19px;
   -webkit-border-radius: 19px;
   border-radius: 10px;
@@ -54,9 +50,35 @@ body {
   padding-bottom: 20px;
 }
 
+/* ログアウト */
 .logout_btn {
+  display: block;
+  text-align: right;
+}
+
+/* タスク詳細 */
+.show_label {
+  padding: 10px;
+  border-left: 5px solid #55b1df;
+  background: #f4f4f4;
+  display: block;
+}
+.edit_task {
+  width: 400px;
+  margin-right: 20px;
+}
+.btn_group {
+  text-align: right;
+  padding-bottom: 20px;
+}
+.edit_btn {
   display: inline-block;
 }
+.red {
+  background-color: #ed6868;
+}
+.red:hover{background-color: #fff; border:1px solid #ed6868; color:#ed6868; cursor:pointer;}
+.red:focus{outline: none;}
 
 /* レスポンシブ */
 @media screen and (max-width:380px) {
@@ -75,6 +97,12 @@ body {
     }
     .due_date {
       display: none;
+    }
+    .edit_task {
+      width: 220px;
+    }
+    .edit_memo {
+      width: 260px;
     }
 }
 
