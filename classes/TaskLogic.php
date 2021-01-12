@@ -191,6 +191,27 @@ class TaskLogic {
   }
 
   /**
+   * タスクを未完了に戻す
+   * @param int $task_id
+   * @return bool $result
+   */
+  public static function undoTask($task_id)
+  {
+    $sql = 'UPDATE task SET completed = NULL WHERE id = ?';
+
+    $arr = [];
+    $arr[] = $task_id;
+
+    try {
+      $stmt = connect()->prepare($sql);
+      $result = $stmt->execute($arr);
+      return $result;
+    } catch (\Exception $e) {
+      exit('表示できませんでした');
+    }
+  }
+
+  /**
    * タスクを削除する
    * @param int $task_id
    * @return bool $result

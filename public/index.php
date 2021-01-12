@@ -106,7 +106,7 @@ if (!isset($tasklist) || !isset($comp_tasklist)) {
     </div>
 
     <!-- 全タスク表示 -->
-    <div class="page_content">
+    <div class="page_content" name="task">
       <?php if ($tasklist === array()) : ?>
         <p>タスクが登録されていません</p>
       <?php else : ?>
@@ -115,12 +115,12 @@ if (!isset($tasklist) || !isset($comp_tasklist)) {
             <thead>
               <tr>
                 <th scope="col">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                  <!-- <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkAll"> -->
                     <label class="form-check-label" for="checkAll">
                       タスク&nbsp;(<?php echo h($max_task) ?>)
                     </label>
-                  </div>
+                  <!-- </div> -->
                 </th>
                 <!-- ソートが追加日の時 -->
                 <?php if ($sort === 'created') : ?>
@@ -164,7 +164,7 @@ if (!isset($tasklist) || !isset($comp_tasklist)) {
                   <!-- タスク -->
                   <td>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="selected_id[]" value="<?php echo h($task['id']) ?>" id="task<?php echo h($task['id']) ?>">
+                      <!-- <input class="form-check-input" type="checkbox" name="selected_id[]" value="<?php //echo h($task['id']) ?>" id="task<?php //echo h($task['id']) ?>"> -->
                       <label class="form-check-label" for="task<?php echo h($task['id']) ?>">
                         <?php echo h($task['task']) ?>
                       </label>
@@ -235,7 +235,7 @@ if (!isset($tasklist) || !isset($comp_tasklist)) {
             <tr>
               <th scope="col">
                 <label class="form-check-label" for="checkAll">
-                  タスク&nbsp;(<?php echo h($max_task) ?>)
+                  完了済タスク
                 </label>
               </th>
               <th>
@@ -247,22 +247,35 @@ if (!isset($tasklist) || !isset($comp_tasklist)) {
           </thead>
 
           <tbody>
-            <?php foreach ($comp_tasklist as $comp_task) : ?>
+            <!-- 完了済みタスクがないとき -->
+            <?php if(count($comp_tasklist) === 0): ?>
               <tr>
-                <!-- タスク -->
                 <td>
-                  <label class="form-check-label" for="task<?php echo h($task['id']) ?>">
-                    <?php echo h($comp_task['task']) ?>
-                  </label>
-                </td>
-                <td>
-                  <p><?php echo h(str_replace("-", "/", substr($comp_task['completed'], 5, 5))); ?></p>
-                </td>
-                <td>
-                  <button class="btn">もとに戻す</button>
+                  完了済みのタスクはありません
                 </td>
               </tr>
-            <?php endforeach ?>
+            <!-- あるとき -->
+            <?php else: ?>
+              <?php foreach ($comp_tasklist as $comp_task) : ?>
+                <tr>
+                  <td>
+                    <label class="form-check-label" for="task<?php echo h($task['id']) ?>">
+                      <?php echo h($comp_task['task']) ?>
+                    </label>
+                  </td>
+                  <td>
+                    <p><?php echo h(str_replace("-", "/", substr($comp_task['completed'], 5, 5))); ?></p>
+                  </td>
+                  <td>
+                    <form action="undo_task.php" method="post">
+                      <button class="btn" name="undo_id" value="<?php echo $comp_task['id'] ?>">
+                        戻す
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              <?php endforeach ?>
+            <?php endif ?>
           </tbody>
         </table>
       </div>
