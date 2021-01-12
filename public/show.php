@@ -91,7 +91,7 @@ if (!$task) {
       </form>
       <div class="btn_group">
         <button type="submit" class="btn edit_btn" form="edit_task">変更</button>
-        <button type="submit" class="btn edit_btn red">削除</button>
+        <button type="submit" class="btn edit_btn red" form="delete_task">削除</button>
       </div>
       <a href="index.php">←戻る</a>
     </div>

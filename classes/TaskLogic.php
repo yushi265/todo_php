@@ -37,7 +37,7 @@ class TaskLogic {
 
     $offset_num = $limit * ($page - 1);
 
-    $sql = "SELECT * FROM task WHERE user_id = ? ORDER BY ".$sort." ".$order;
+    $sql = "SELECT * FROM task WHERE user_id = ? AND completed IS NULL ORDER BY ".$sort." ".$order;
     $sql .= " LIMIT ".$offset_num.",".$limit;
 
     $arr = [];
@@ -52,6 +52,29 @@ class TaskLogic {
       exit('表示できませんでした');
     }
   }
+
+  /**
+   * 完了済みタスクを取得
+   * @param int $user_id
+   * @return array $comp_list
+   */
+  public static function getUserCompTask($user_id) {
+
+    $sql = "SELECT * FROM task WHERE user_id = ? AND completed IS NOT NULL LIMIT 5";
+
+    $arr = [];
+    $arr[] = $user_id;
+
+    try {
+      $stmt = connect()->prepare($sql);
+      $stmt->execute($arr);
+      $tasklist = $stmt->fetchall();
+      return $tasklist;
+    } catch (\Exception $e) {
+      exit('表示できませんでした');
+    }
+  }
+
 
   /**
    * タスク一覧表示
@@ -142,6 +165,27 @@ class TaskLogic {
       $result = $stmt->execute($arr);
       return $result;
     } catch(\Exception $e) {
+      exit('表示できませんでした');
+    }
+  }
+
+  /**
+   * タスクを完了する
+   * @param int $task_id
+   * @return bool $result
+   */
+  public static function compTask($task_id) {
+    $sql = 'UPDATE task SET completed = ? WHERE id = ?';
+
+    $arr = [];
+    $arr[] = getNowDate();
+    $arr[] = $task_id;
+
+    try {
+      $stmt = connect()->prepare($sql);
+      $result = $stmt->execute($arr);
+      return $result;
+    } catch (\Exception $e) {
       exit('表示できませんでした');
     }
   }

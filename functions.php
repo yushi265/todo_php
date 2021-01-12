@@ -20,6 +20,16 @@ function getNow() {
 }
 
 /**
+ * 現在時刻取得
+ * @param void
+ * @return string
+ */
+function getNowDate() {
+  date_default_timezone_set('Asia/Tokyo');
+  return date("Y/m/d");
+}
+
+/**
  * CSRF対策
  * @param void
  * @return string $csrf_token

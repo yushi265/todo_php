@@ -52,10 +52,10 @@ if (isset($_GET['page'])) {
   $page = '1';
 }
 
-// URLパラメータをもとにタスクを取得
+// URLパラメータをもとに未完了タスクと完了タスクを取得
 $tasklist = TaskLogic::getUserTask($user_id, $sort, $order, $page);
-
-if (!isset($tasklist)) {
+$comp_tasklist = TaskLogic::getUserCompTask($user_id);
+if (!isset($tasklist) || !isset($comp_tasklist)) {
   exit('表示できませんでした');
 }
 
@@ -64,6 +64,7 @@ if (!isset($tasklist)) {
 <!-- HTML -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
@@ -83,7 +84,8 @@ if (!isset($tasklist)) {
     <div class="page_content">
       <h5>
         <?php echo h($_SESSION['login_user']['name'] . "様"); ?>
-        <?php //echo h("<" . $_SESSION['login_user']['email'] . ">"); ?>
+        <?php //echo h("<" . $_SESSION['login_user']['email'] . ">");
+        ?>
       </h5>
       <p>現在時刻：<span id="view_clock"></span></p>
       <!-- タスク追加 -->
@@ -94,8 +96,8 @@ if (!isset($tasklist)) {
           <option value="9999/12/31">-</option>
           <?php for ($i = 0; $i < 14; $i++) : ?>
             <option value="<?php echo h(date('Y/n/j', strtotime('+' . $i . 'day'))); ?>">
-            <?php echo h(date('n/j', strtotime('+' . $i . 'day'))); ?>
-          </option>
+              <?php echo h(date('n/j', strtotime('+' . $i . 'day'))); ?>
+            </option>
           <?php endfor ?>
         </select>
         <input type="hidden" name="user_id" value="<?php echo h($user_id) ?>">
@@ -103,21 +105,21 @@ if (!isset($tasklist)) {
       </form>
     </div>
 
-      <!-- 全タスク表示 -->
-      <div class="page_content">
-        <?php if ($tasklist === array()) : ?>
-          <p>タスクが登録されていません</p>
-          <?php else : ?>
-            <div class="task_list">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="checkAll">
-                        <label class="form-check-label" for="checkAll">
-                          タスク&nbsp;(<?php echo h($max_task) ?>)
-                        </label>
+    <!-- 全タスク表示 -->
+    <div class="page_content">
+      <?php if ($tasklist === array()) : ?>
+        <p>タスクが登録されていません</p>
+      <?php else : ?>
+        <div class="task_list">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                    <label class="form-check-label" for="checkAll">
+                      タスク&nbsp;(<?php echo h($max_task) ?>)
+                    </label>
                   </div>
                 </th>
                 <!-- ソートが追加日の時 -->
@@ -182,6 +184,10 @@ if (!isset($tasklist)) {
                     <a href="show.php?id=<?php echo h($task['id']) ?>">
                       <button class="btn">詳細</button>
                     </a>
+                    <button class="btn" type="submit" form="comp_id">完了</button>
+                    <form action="comp_task.php" method="post" id='comp_id'>
+                      <input type="hidden" name="comp_id" value="<?php echo $task['id'] ?>">
+                    </form>
                   </td>
                 </tr>
               <?php endforeach ?>
@@ -219,13 +225,55 @@ if (!isset($tasklist)) {
           <?php endif ?>
         </div>
       </nav>
-
-      <!-- ログアウト -->
-        <form action="logout.php" method="post" class="logout_btn">
-          <input type="hidden" name="logout">
-          <button class="btn" type="submit" name="logout" value="ログアウト" class="btn">ログアウト</button>
-          </form>
     </div>
+
+    <!-- 完了済みタスク表示 -->
+    <div class="page_content">
+      <div class="task_list">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">
+                <label class="form-check-label" for="checkAll">
+                  タスク&nbsp;(<?php echo h($max_task) ?>)
+                </label>
+              </th>
+              <th>
+                完了日
+              </th>
+              <th>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <?php foreach ($comp_tasklist as $comp_task) : ?>
+              <tr>
+                <!-- タスク -->
+                <td>
+                  <label class="form-check-label" for="task<?php echo h($task['id']) ?>">
+                    <?php echo h($comp_task['task']) ?>
+                  </label>
+                </td>
+                <td>
+                  <p><?php echo h(str_replace("-", "/", substr($comp_task['completed'], 5, 5))); ?></p>
+                </td>
+                <td>
+                  <button class="btn">もとに戻す</button>
+                </td>
+              </tr>
+            <?php endforeach ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ログアウト -->
+    <form action="logout.php" method="post" class="logout_btn">
+      <input type="hidden" name="logout">
+      <button class="btn" type="submit" name="logout" value="ログアウト" class="btn">ログアウト</button>
+    </form>
+  </div>
   </div>
 
   <!-- 現在時刻表示関数 -->
@@ -251,4 +299,5 @@ if (!isset($tasklist)) {
     }
   </script>
 </body>
+
 </html>
